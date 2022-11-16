@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">TranslateApp</string>
+    <string name="search">Search</string>
+    <string-array name="spinner_entries">
+        <item>nom</item>
+        <item> http://www.google.fr/search?q= </item>
+    </string-array>
 </resources>
