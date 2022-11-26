@@ -17,6 +17,6 @@ data class Mot(
     var translation:String,
     var dictionnary:Long,
     var toLearn:Boolean,
-    var learningEnding:Date,
+    //var learningEnding:Date,
     var knowledge:Int
 )

@@ -5,7 +5,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlin.jvm.Volatile
 
-@Database(entities = [Dictionnaire::class], version = 1)
+@Database(entities = [Dictionnaire::class, Mot::class], version = 1)
 abstract class DicoBD : RoomDatabase() {
         abstract fun MyDao() : Dao
         companion object {
