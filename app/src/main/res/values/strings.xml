@@ -1,8 +1,19 @@
 <resources>
     <string name="app_name">TranslateApp</string>
     <string name="search">Search</string>
+    <string name="save">Save</string>
+    <string name="word">Word</string>
     <string-array name="spinner_entries">
-        <item>nom</item>
-        <item> http://www.google.fr/search?q= </item>
+        <item>Google</item>
+    </string-array>
+    <string-array name="langSpinner_entries">
+        <item>Français</item>
+        <item>Anglais</item>
+        <item>Espagnol</item>
+        <item>Russe</item>
+        <item>Japonais</item>
+        <item>Allemand</item>
+        <item>Portugais</item>
+        <item>Indien</item>
     </string-array>
 </resources>

@@ -15,7 +15,7 @@
         android:gravity="center"
         android:inputType="textPersonName"
         android:minHeight="48dp"
-        android:text="Name"
+        android:text="@string/word"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -49,24 +49,31 @@
 
     <Spinner
         android:id="@+id/languedest"
-        android:layout_width="198dp"
-        android:layout_height="48dp"
-        tools:layout_editor_absoluteX="207dp"
-        tools:layout_editor_absoluteY="277dp" />
+        android:layout_width="206dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="276dp"
+        android:entries="@array/langSpinner_entries"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
-        android:id="@+id/languedep"
-        android:layout_width="198dp"
-        android:layout_height="48dp"
-        tools:layout_editor_absoluteX="9dp"
-        tools:layout_editor_absoluteY="277dp" />
+        android:id="@+id/languesourc"
+        android:layout_width="206dp"
+        android:layout_height="45dp"
+        android:layout_marginTop="276dp"
+        android:layout_marginEnd="204dp"
+        android:entries="@array/langSpinner_entries"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="23dp"
         android:layout_height="18dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginEnd="200dp"
         android:text="TO"
-        tools:layout_editor_absoluteX="197dp"
-        tools:layout_editor_absoluteY="259dp" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
