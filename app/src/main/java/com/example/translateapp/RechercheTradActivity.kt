@@ -32,22 +32,16 @@ class RechercheTradActivity : AppCompatActivity() {
         val endLang = binding.languedest.selectedItem.toString()
         val mot = binding.word.text.toString()
 
-        var url = ""
-        var dicosAvailable:List<Dictionnaire>
-        if(dico == "Google"){
-            url = "http://www.google.fr/search?q=traduction+" + mot + endLang
+        var url = "http://www.google.fr/search?q=traduction+$mot $endLang"
+
+        model.loadMot(mot, endLang)
+        if(model.certainsMots.value != null && model.certainsMots.value!!.isNotEmpty()){   //Cas
+            url = model.certainsMots.value!![0].urlTransl
         }else{
-            dicosAvailable = model.loadDictionnaireDeMot(dico, endLang)
-            if(dicosAvailable.size != 0){   //Cas
-                url = dicosAvailable[0].url
-            }else{
-                dicosAvailable = model.loadDictionnaire(dico, startLang, endLang)
-                if(dicosAvailable.size != 0){
-                    url = dicosAvailable[0].url + mot
-                }
+            model.loadDictionnaire(dico, startLang, endLang)
+            if(model.certainsDictionnaires.value != null  && model.certainsDictionnaires.value!!.isNotEmpty()){
+                url = model.certainsDictionnaires.value!![0].url + mot
             }
-
-
         }
         // TODO val urlDico -> get url pour le dico selectionné
 

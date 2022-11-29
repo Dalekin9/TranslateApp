@@ -9,6 +9,10 @@ class AjoutViewModel(application: Application) : AndroidViewModel(application) {
 
     val insertInfo = MutableLiveData<Long>(0)
 
+    var certainsDictionnaires = MutableLiveData<List<Dictionnaire>>()
+
+    var certainsMots = MutableLiveData<List<Mot>>()
+
     fun insertDico(vararg dictionnaire: Dictionnaire){
         thread{
             val l = dao.insertDico(*dictionnaire)
@@ -23,9 +27,9 @@ class AjoutViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loadDictionnaire(nom:String, startLang:String, endLang:String) = dao.loadDictionnaire(nom, startLang, endLang)
+    fun loadDictionnaire(nom:String, startLang:String, endLang:String) = thread { certainsDictionnaires.postValue(dao.loadDictionnaire(nom, startLang, endLang))}
 
-    fun loadDictionnaireDeMot(mot:String,  endLang:String) = dao.loadDictionnaireDeMot(mot, endLang)
+    fun loadDictionnaireDeMot(mot:String,  endLang:String) = thread { certainsDictionnaires.postValue(dao.loadDictionnaireDeMot(mot, endLang))}
 
-    fun loadMot(mot: String) = dao.loadMot(mot)
+    fun loadMot(mot: String, endLang: String) = thread{ certainsMots.postValue(dao.loadMot(mot, endLang))}
 }

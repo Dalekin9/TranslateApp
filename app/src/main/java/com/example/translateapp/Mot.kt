@@ -15,6 +15,7 @@ data class Mot(
     @PrimaryKey val idMot:Long = 0,
     var word:String,
     var translation:String,
+    var urlTransl:String,
     var dictionnary:Long,
     var toLearn:Boolean,
     //var learningEnding:Date,
