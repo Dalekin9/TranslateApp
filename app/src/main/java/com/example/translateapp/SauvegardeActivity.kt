@@ -48,7 +48,6 @@ class SauvegardeActivity : AppCompatActivity() {
             val isDico = model.loadDictionnaire(dicoURL, langueInit, langueTrad)
             // si oui mettre a jour les vars
             if (isDico.value != null) {
-                Log.d("INSERT", "dans Insertion dico")
                 dicoID = isDico.value!!.idDico
             } else {
                 // sinon creer un dico + insertDico + mettre a jour les vars
