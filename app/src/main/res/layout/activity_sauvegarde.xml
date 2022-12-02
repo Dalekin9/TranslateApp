@@ -6,11 +6,66 @@
     android:layout_height="match_parent"
     tools:context=".SauvegardeActivity">
 
+    <EditText
+        android:id="@+id/word"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text="@string/word"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/wordTrad"
+        android:layout_width="409dp"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:text="@string/traduction"
+        app:layout_constraintTop_toBottomOf="@+id/word"
+        tools:layout_editor_absoluteX="0dp" />
+
+    <Spinner
+        android:id="@+id/languedest"
+        android:layout_width="184dp"
+        android:layout_height="48dp"
+        android:entries="@array/langSpinner_entries"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordTrad" />
+
+    <Spinner
+        android:id="@+id/languesourc"
+        android:layout_width="192dp"
+        android:layout_height="50dp"
+        android:entries="@array/langSpinner_entries"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/wordTrad" />
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40dp"
+        android:onClick="addMot"
+        android:text="@string/save"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/languedest" />
+
     <TextView
         android:id="@+id/url"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Prout"
-        tools:layout_editor_absoluteX="177dp"
-        tools:layout_editor_absoluteY="363dp" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_editor_absoluteX="177dp" />
+
+    <Button
+        android:id="@+id/button2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="data"
+        android:text="Data"
+        app:layout_constraintTop_toBottomOf="@+id/button"
+        tools:layout_editor_absoluteX="159dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
