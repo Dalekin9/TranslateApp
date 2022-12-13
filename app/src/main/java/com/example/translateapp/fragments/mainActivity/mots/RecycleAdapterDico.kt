@@ -1,4 +1,4 @@
-package com.example.translateapp.fragments.mainActivity.notifications
+package com.example.translateapp.fragments.mainActivity.mots
 
 import android.os.Build
 import android.view.LayoutInflater
@@ -7,7 +7,6 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.databinding.ItemLayoutBinding
-import com.example.translateapp.database.entity.Mot
 
 class RecycleAdapterDico: RecyclerView.Adapter<RecycleAdapterDico.VH>() {
 

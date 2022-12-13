@@ -1,10 +1,8 @@
 package com.example.translateapp.database.entity
 import androidx.room.Entity
-import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.example.translateapp.database.entity.Dictionnaire
 
-@Entity()
+@Entity
 data class Mot(
     var word:String,
     var translation:String,

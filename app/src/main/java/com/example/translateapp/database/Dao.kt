@@ -12,13 +12,16 @@ interface Dao {
     fun insertDico(vararg dictionnaire: Dictionnaire):List<Long>
 
     @Insert(entity = Mot::class, onConflict = OnConflictStrategy.IGNORE)
-    fun insertMot(vararg mot: Mot):List<Long>
+    fun insertMot(vararg mot: Mot): List<Long>
 
     @Query("SELECT * FROM Dictionnaire")
     fun loadAllDictionnaires(): LiveData<List<Dictionnaire>>
 
     @Query("SELECT * FROM Mot")
     fun loadAllMots(): LiveData<List<Mot>>
+
+    @Query("SELECT * FROM Mot WHERE toLearn = :learn")
+    fun loadAllMotsNeedToBeLearn(learn: Boolean): LiveData<List<Mot>>
 
     //@Query("SELECT * FROM Dictionnaire WHERE url LIKE 'http_//%' || :url || '.%' AND startLanguage = :startLang AND endLanguage = :endLang ")
     @Query("SELECT * FROM Dictionnaire WHERE url LIKE :url AND startLanguage = :startLang AND endLanguage = :endLang ")

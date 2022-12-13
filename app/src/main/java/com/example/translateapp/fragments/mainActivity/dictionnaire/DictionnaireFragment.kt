@@ -50,12 +50,6 @@ class DictionnaireFragment : Fragment() {
             adapter.notifyDataSetChanged()
         }
 
-        dictionnaireViewModel.insertInfo.observe(viewLifecycleOwner) {
-            Log.i("INFO", "dans insertInfo observer ${dictionnaireViewModel.insertInfo.value}")
-            dictionnaireViewModel.loadAllMots().value?.let { it1 -> adapter.setNewPaysList(it1) }
-            adapter.notifyDataSetChanged()
-        }
-
         dictionnaireViewModel.loadAllMots()
 
         return root

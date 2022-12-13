@@ -1,10 +1,9 @@
-package com.example.translateapp.fragments.mainActivity.notifications
+package com.example.translateapp.fragments.mainActivity.mots
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.translateapp.database.DicoBD
 import com.example.translateapp.database.entity.Mot
 import kotlin.concurrent.thread

@@ -1,4 +1,4 @@
-package com.example.translateapp.fragments.mainActivity.notifications
+package com.example.translateapp.fragments.mainActivity.mots
 
 import android.os.Bundle
 import android.util.Log
@@ -9,10 +9,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.translateapp.RecycleAdapter
 import com.example.translateapp.databinding.FragmentDashboardBinding
-import com.example.translateapp.databinding.FragmentNotificationsBinding
-import com.example.translateapp.fragments.mainActivity.dictionnaire.DictionnaireViewModel
 
 class NotificationsFragment : Fragment() {
 
