@@ -41,7 +41,13 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     fun loadDictionnaire(url: String, startLang: String, endLang: String) =
         dao.loadDictionnaire(url, startLang, endLang)
 
-    fun loadDictionnaireDeMot(mot: String, endLang: String) = thread { certainsDictionnaires.postValue(dao.loadDictionnaireDeMot(mot, endLang))}
+    fun loadDictionnaireDeMot(mot: String, endLang: String) =
+        thread { certainsDictionnaires.postValue(dao.loadDictionnaireDeMot(mot, endLang)) }
 
-    fun loadMot(mot: String, endLang: String) = thread{ certainsMots.postValue(dao.loadMot(mot, endLang))}
+    fun loadMot(mot: String, endLang: String) =
+        thread { certainsMots.postValue(dao.loadMot(mot, endLang)) }
+
+    fun loadAllMotsNeedToBeLearn(bool: Boolean) = dao.loadAllMotsNeedToBeLearn(bool)
+
+
 }

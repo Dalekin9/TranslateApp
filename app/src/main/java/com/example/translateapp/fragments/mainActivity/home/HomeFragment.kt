@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -66,25 +67,24 @@ class HomeFragment : Fragment() {
         /* TODO voir comment modifier l'heure, surement via les sharedPreferences
         *   mais surtout voir si cela est pris en compte lors du changement ds les parametres */
 
+        //amorcer Alarme
+        val alarmManager =
+            requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+
+        /*
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
             set(Calendar.HOUR_OF_DAY, 17)
             set(Calendar.MINUTE, 29)
         }
-        //amorcer Alarme
-        val alarmManager =
-            requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
         alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-
-
-        /*
-        *alarmManager.set(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 20,
-            pendingIntent
-        )
         */
 
+        alarmManager.setExact(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + 20 * 1000,
+            pendingIntent
+        )
 
         return root
     }

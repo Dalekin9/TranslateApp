@@ -3,16 +3,15 @@ package com.example.translateapp.service
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.IBinder
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.lifecycle.LifecycleService
 import com.example.translateapp.R
 import com.example.translateapp.database.Dao
 import com.example.translateapp.database.DicoApplication
@@ -20,7 +19,7 @@ import com.example.translateapp.database.entity.Mot
 import java.lang.Integer.min
 import kotlin.random.Random
 
-class NotificationsService : Service() {
+class NotificationsService : LifecycleService() {
 
     private val CHANNEL_ID = "message urgent"
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
@@ -32,46 +31,47 @@ class NotificationsService : Service() {
     private val currentIdList = mutableListOf<Int>()
     private val currentMotList = mutableListOf<Mot>()
     lateinit var dao: Dao
+    private var data: List<Mot>? = null
 
-    override fun onBind(p0: Intent?): IBinder? {
-        TODO("Not yet implemented")
-    }
 
     override fun onCreate() {
         super.onCreate()
         Log.d("NOTIF", "dans OnCreate")
-        //dao = (application as DicoApplication).database.MyDao()
+        dao = (application as DicoApplication).database.MyDao()
         createNotificationChannel()
+
+        dao.loadAllMotsNeedToBeLearn(true).observe(this) {
+            Log.i("INFO", "dans loadAll observer")
+            data = it
+        }
+
+        dao.loadAllMotsNeedToBeLearn(true)
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        super.onStartCommand(intent, flags, startId)
         Log.d("NOTIF", "dans OnStartCommand")
-        dao = (application as DicoApplication).database.MyDao()
-
         /*
         TODO update currentIdList quand suppression de notif
         */
-
-        val allMots2 = dao.loadAllMotsNeedToBeLearn(true)
-        val data = allMots2.value!!
 
         Log.d("NOTIF", "avant le if")
         if (data != null) {
             Log.d("NOTIF", "pas null")
 
             //val nbNotifsInitial = intent!!.getIntExtra("nbNotif", 10)
-            val nbNotifs = min(6, data.size - 1)
+            val nbNotifs = min(6, data!!.size - 1)
 
             for (i in 0 until nbNotifs) {
                 if (!currentIdList.contains(i)) {
 
                     Log.d("NOTIF", "envoie dune notification")
-                    var x = Random.nextInt(data.size)
-                    var mot = data[x]
+                    var x = Random.nextInt(data!!.size)
+                    var mot = data!![x]
                     while (currentMotList.contains(mot)) {
-                        x = Random.nextInt(data.size)
-                        mot = data[x]
+                        x = Random.nextInt(data!!.size)
+                        mot = data!![x]
                     }
 
                     val message = "Traduis : ${mot.word}"
