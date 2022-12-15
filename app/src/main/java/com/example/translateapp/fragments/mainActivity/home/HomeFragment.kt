@@ -82,7 +82,7 @@ class HomeFragment : Fragment() {
 
         alarmManager.setExact(
             AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 20 * 1000,
+            SystemClock.elapsedRealtime() + 15 * 1000,
             pendingIntent
         )
 

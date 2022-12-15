@@ -41,76 +41,71 @@ class NotificationsService : LifecycleService() {
         createNotificationChannel()
 
         dao.loadAllMotsNeedToBeLearn(true).observe(this) {
+            /*
+            TODO update currentIdList quand suppression de notif
+            */
             Log.i("INFO", "dans loadAll observer")
             data = it
-        }
 
-        dao.loadAllMotsNeedToBeLearn(true)
+            Log.d("NOTIF", "avant le if")
+            if (data != null) {
+                Log.d("NOTIF", "pas null")
+
+                //val nbNotifsInitial = intent!!.getIntExtra("nbNotif", 10)
+                val nbNotifs = min(6, data!!.size)
+
+                for (i in 0 until nbNotifs) {
+                    if (!currentIdList.contains(i)) {
+
+                        Log.d("NOTIF", "envoie dune notification")
+                        var x = Random.nextInt(data!!.size)
+                        var mot = data!![x]
+                        while (currentMotList.contains(mot)) {
+                            x = Random.nextInt(data!!.size)
+                            mot = data!![x]
+                        }
+
+                        val message = "Traduis : ${mot.word}"
+                        val monIntent = Intent(Intent.ACTION_VIEW)
+                        monIntent.data = Uri.parse(mot.urlTransl)
+
+                        val pendingIntent = PendingIntent.getActivity(
+                            this, 0, monIntent,
+                            PendingIntent.FLAG_IMMUTABLE
+                        )
+
+                        val notification = NotificationCompat.Builder(this, CHANNEL_ID)
+                            .setSmallIcon(R.drawable.small)
+                            .setContentTitle("Do you remember well ?")
+                            .setContentText(message)
+                            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                            .setContentIntent(pendingIntent)
+                            .setAutoCancel(true)
+
+
+                        with(NotificationManagerCompat.from(this)) {
+                            notify(i, notification.build())
+                        }
+                        currentIdList.add(i)
+                        currentMotList.add(mot)
+                    }
+                }
+            }
+        }
     }
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         Log.d("NOTIF", "dans OnStartCommand")
-        /*
-        TODO update currentIdList quand suppression de notif
-        */
 
-        Log.d("NOTIF", "avant le if")
-        if (data != null) {
-            Log.d("NOTIF", "pas null")
+        dao.loadAllMotsNeedToBeLearn(true)
 
-            //val nbNotifsInitial = intent!!.getIntExtra("nbNotif", 10)
-            val nbNotifs = min(6, data!!.size - 1)
-
-            for (i in 0 until nbNotifs) {
-                if (!currentIdList.contains(i)) {
-
-                    Log.d("NOTIF", "envoie dune notification")
-                    var x = Random.nextInt(data!!.size)
-                    var mot = data!![x]
-                    while (currentMotList.contains(mot)) {
-                        x = Random.nextInt(data!!.size)
-                        mot = data!![x]
-                    }
-
-                    val message = "Traduis : ${mot.word}"
-                    val monIntent = Intent(Intent.ACTION_VIEW)
-                    monIntent.data = Uri.parse(mot.urlTransl)
-
-                    val pendingIntent = PendingIntent.getActivity(
-                        this, 0, monIntent,
-                        PendingIntent.FLAG_IMMUTABLE
-                    )
-
-                    val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.small)
-                        .setContentTitle("Do you remember well ?")
-                        .setContentText(message)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-
-
-                    with(NotificationManagerCompat.from(this)) {
-                        notify(i, notification.build())
-                    }
-                    currentIdList.add(i)
-                    currentMotList.add(mot)
-                }
-            }
-        }
         return START_NOT_STICKY
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
     }
 
     /* les notifications doivent posséder un channel */
     private fun createNotificationChannel() {
-        // Create the NotificationChannel, but only on API 26+ because
-        // the NotificationChannel class is new and not in the support library
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             //val name = getString(R.string.channel_name)
             //val descriptionText = getString(R.string.channel_description)
@@ -124,37 +119,5 @@ class NotificationsService : LifecycleService() {
             notificationManager.createNotificationChannel(channel)
         }
     }
-
-
-    /*
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        Log.d("NOTIF", "dans OnStartCommand")
-
-            for (i in 0 until 4 ) {
-
-
-                    val message = "Traduis "
-                    val monIntent = Intent(this, MainActivity::class.java)
-
-                    val pendingIntent = PendingIntent.getActivity(
-                        this, 0, monIntent,
-                        PendingIntent.FLAG_IMMUTABLE
-                    )
-
-                    val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                        .setSmallIcon(R.drawable.small)
-                        .setContentTitle("Do you remember well ?")
-                        .setContentText(message)
-                        .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                        .setContentIntent(pendingIntent)
-                        .setAutoCancel(true)
-
-                    with(NotificationManagerCompat.from(this)) {
-                        notify(i, notification.build())
-                    }
-        }
-        return START_NOT_STICKY
-    }
-     */
 
 }
