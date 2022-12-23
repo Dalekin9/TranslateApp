@@ -1,4 +1,4 @@
-package com.example.translateapp.fragments.mainActivity.mots
+package com.example.translateapp.fragments.mainActivity.jeu
 
 import android.os.Build
 import android.view.LayoutInflater

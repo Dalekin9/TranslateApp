@@ -75,7 +75,7 @@ class NotificationsService : LifecycleService() {
                         )
 
                         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
-                            .setSmallIcon(R.drawable.small)
+                            .setSmallIcon(R.drawable.ic_notif)
                             .setContentTitle("Do you remember well ?")
                             .setContentText(message)
                             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
