@@ -1,4 +1,4 @@
-package com.example.translateapp.fragments.mainActivity.dictionnaire
+package com.example.translateapp.fragments.mainActivity.jeu
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -8,7 +8,7 @@ import com.example.translateapp.database.DicoBD
 import com.example.translateapp.database.entity.Mot
 import kotlin.concurrent.thread
 
-class DictionnaireViewModel(application: Application) : AndroidViewModel(application) {
+class JeuViewModel(application: Application) : AndroidViewModel(application) {
 
     private val _text = MutableLiveData<String>().apply {
         value = "This is dashboard Fragment"
@@ -26,5 +26,5 @@ class DictionnaireViewModel(application: Application) : AndroidViewModel(applica
         }
     }
 
-    fun loadAllMots() = dao.loadAllMots()
+    fun loadAllDicos() = dao.loadAllDictionnaires()
 }

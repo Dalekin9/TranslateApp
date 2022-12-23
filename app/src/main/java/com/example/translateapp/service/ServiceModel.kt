@@ -1,4 +1,5 @@
-package com.example.translateapp
+package com.example.translateapp.service
+
 import android.app.Application
 import android.util.Log
 import androidx.lifecycle.AndroidViewModel
@@ -8,7 +9,7 @@ import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
 import kotlin.concurrent.thread
 
-class ViewModel(application: Application) : AndroidViewModel(application) {
+class ServiceModel(application: Application) : AndroidViewModel(application) {
 
     val dao = (application as DicoApplication).database.MyDao()
 
@@ -18,19 +19,19 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     var certainsDictionnaires = MutableLiveData<List<Dictionnaire>>()
     var certainsMots = MutableLiveData<List<Mot>>()
 
-    fun insertDico(vararg dictionnaire: Dictionnaire){
-        Thread{
+    fun insertDico(vararg dictionnaire: Dictionnaire) {
+        Thread {
             val l = dao.insertDico(*dictionnaire)
             Log.d("INSERT", "dans Insertion dico")
             insertInfo.postValue(if (l[0] == -1L) -1L else l[0])
         }.start()
     }
 
-    fun insertMot(vararg mot: Mot){
-        Thread{
+    fun insertMot(vararg mot: Mot) {
+        Thread {
             val l = dao.insertMot(*mot)
             Log.d("INSERT", "dans Insertion mot")
-            insertInfo.postValue(if(l[0] == -1L) -1L else l[0])
+            insertInfo.postValue(if (l[0] == -1L) -1L else l[0])
         }.start()
     }
 
@@ -46,8 +47,4 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
 
     fun loadMot(mot: String, endLang: String) =
         thread { certainsMots.postValue(dao.loadMot(mot, endLang)) }
-
-    fun loadAllMotsNeedToBeLearn(bool: Boolean) = dao.loadAllMotsNeedToBeLearn(bool)
-
-
 }
