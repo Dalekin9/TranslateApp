@@ -8,11 +8,42 @@ import com.example.translateapp.database.entity.Mot
 @Dao
 interface Dao {
 
-    @Insert(entity = Dictionnaire::class, onConflict = OnConflictStrategy.IGNORE)
-    fun insertDico(vararg dictionnaire: Dictionnaire):List<Long>
+    /*
+    **************
+    * INSERTIONS *
+    **************
+     */
 
-    @Insert(entity = Mot::class, onConflict = OnConflictStrategy.IGNORE)
+    @Insert(entity = Dictionnaire::class, onConflict = OnConflictStrategy.IGNORE)
+    fun insertDico(vararg dictionnaire: Dictionnaire): List<Long>
+
+    @Insert(entity = Mot::class, onConflict = OnConflictStrategy.REPLACE)
     fun insertMot(vararg mot: Mot): List<Long>
+
+    /*
+    **********
+    * UPDATE *
+    **********
+     */
+
+    @Update
+    fun updateMot(mot: Mot): Int
+
+
+    /*
+    **********
+    * REMOVE *
+    **********
+     */
+
+    @Delete
+    fun deleteMot(mot: Mot): Int
+
+    /*
+    *********
+    * LOADS *
+    *********
+     */
 
     @Query("SELECT * FROM Dictionnaire")
     fun loadAllDictionnaires(): LiveData<List<Dictionnaire>>
@@ -32,5 +63,15 @@ interface Dao {
 
     @Query("SELECT * FROM Mot INNER JOIN Dictionnaire WHERE word = :mot AND idDico = dictionnary AND endLanguage = :endLang")
     fun loadMot(mot: String, endLang: String): List<Mot>
+
+    @Query("SELECT * FROM Mot WHERE initLanguage = :startLang AND tradLanguage = :endLang AND toLearn = :learn")
+    fun loadAllMotsNeedToBeLearnWithSpecificLanguages(
+        learn: Boolean,
+        startLang: String,
+        endLang: String
+    ): List<Mot>
+
+    @Query("SELECT * FROM Mot WHERE initLanguage = :startLang AND tradLanguage = :endLang")
+    fun loadCertainsMot(startLang: String, endLang: String): List<Mot>
 
 }

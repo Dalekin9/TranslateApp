@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.service.notification.NotificationListenerService
+import android.service.notification.StatusBarNotification
 import android.util.Log
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
@@ -23,43 +25,43 @@ class NotificationsService : LifecycleService() {
 
     private val CHANNEL_ID = "message urgent"
     private val notificationManager by lazy { getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager }
-    val pendingFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
+    private val pendingFlag = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M)
         PendingIntent.FLAG_IMMUTABLE
     else
         PendingIntent.FLAG_UPDATE_CURRENT
 
-    private val currentIdList = mutableListOf<Int>()
-    private val currentMotList = mutableListOf<Mot>()
-    lateinit var dao: Dao
     private var data: List<Mot>? = null
 
+    companion object {
+        private val currentIdMotMap = mutableMapOf<Int, Mot>()
+        lateinit var dao: Dao
+    }
 
     override fun onCreate() {
         super.onCreate()
-        Log.d("NOTIF", "dans OnCreate")
+
         dao = (application as DicoApplication).database.MyDao()
         createNotificationChannel()
 
+        Log.i("INFO NOTIF", "onCreate")
+
         dao.loadAllMotsNeedToBeLearn(true).observe(this) {
-            /*
-            TODO update currentIdList quand suppression de notif
-            */
-            Log.i("INFO", "dans loadAll observer")
             data = it
-
-            Log.d("NOTIF", "avant le if")
+            Log.i("INFO NOTIF", "observer")
             if (data != null) {
-                Log.d("NOTIF", "pas null")
-
-                //val nbNotifsInitial = intent!!.getIntExtra("nbNotif", 10)
-                val nbNotifs = min(6, data!!.size)
-
+                Log.i("INFO NOTIF", "data non null")
+                val nbNotifs = min(12, data!!.size)
+                Log.i("INFO NOTIF", "nb de notif: $nbNotifs")
+                val currentIdList = currentIdMotMap.keys
+                Log.i("INFO NOTIF", "nb de id: ${currentIdList.size}")
                 for (i in 0 until nbNotifs) {
                     if (!currentIdList.contains(i)) {
 
-                        Log.d("NOTIF", "envoie dune notification")
                         var x = Random.nextInt(data!!.size)
                         var mot = data!![x]
+
+                        val currentMotList = currentIdMotMap.values
+
                         while (currentMotList.contains(mot)) {
                             x = Random.nextInt(data!!.size)
                             mot = data!![x]
@@ -71,7 +73,7 @@ class NotificationsService : LifecycleService() {
 
                         val pendingIntent = PendingIntent.getActivity(
                             this, 0, monIntent,
-                            PendingIntent.FLAG_IMMUTABLE
+                            pendingFlag
                         )
 
                         val notification = NotificationCompat.Builder(this, CHANNEL_ID)
@@ -86,8 +88,7 @@ class NotificationsService : LifecycleService() {
                         with(NotificationManagerCompat.from(this)) {
                             notify(i, notification.build())
                         }
-                        currentIdList.add(i)
-                        currentMotList.add(mot)
+                        currentIdMotMap[i] = mot
                     }
                 }
             }
@@ -97,8 +98,7 @@ class NotificationsService : LifecycleService() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        Log.d("NOTIF", "dans OnStartCommand")
-
+        Log.i("INFO NOTIF", "onStartCommand")
         dao.loadAllMotsNeedToBeLearn(true)
 
         return START_NOT_STICKY
@@ -117,6 +117,39 @@ class NotificationsService : LifecycleService() {
                 description = descriptionText
             }
             notificationManager.createNotificationChannel(channel)
+        }
+    }
+
+
+    class NotifListenerService : NotificationListenerService() {
+
+        override fun onNotificationRemoved(sbn: StatusBarNotification) {
+            super.onNotificationRemoved(sbn)
+            /*
+            -- TODO recuper id de la notif, et le remove de la liste d'id -- OK
+            -- TODO remove le mot à apprendre de la liste -- OK
+            -- TODO add +1 dans le learn du mot -- OK
+            -- TODO update le boolean learn si knowledge = 3 -- OK
+            TODO update la date d'apprentissage
+             */
+            Log.i("INFO NOTIF", "dans onNotifRemove: ${currentIdMotMap.keys.size}")
+
+            if (sbn != null) {
+                val id = sbn.id
+                val mot = currentIdMotMap[id]
+
+                currentIdMotMap.remove(id)
+                Log.i("INFO NOTIF", "nb de id dans onNotifRemove: ${currentIdMotMap.keys.size}")
+
+                if (mot != null) {
+                    mot.knowledge += 1
+                    if (mot.knowledge == 3) {
+                        mot.knowledge = 0
+                        mot.toLearn = false
+                    }
+                    dao.updateMot(mot)
+                }
+            }
         }
     }
 

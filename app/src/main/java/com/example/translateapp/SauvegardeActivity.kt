@@ -3,7 +3,6 @@ package com.example.translateapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.database.entity.Dictionnaire
@@ -24,8 +23,11 @@ class SauvegardeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        if( intent.action.equals( "android.intent.action.SEND" ) ){
-            val url = intent.extras?.getString( "android.intent.extra.TEXT" )
+        val button = binding.button
+        button.setOnClickListener { addMot() }
+
+        if (intent.action.equals("android.intent.action.SEND")) {
+            val url = intent.extras?.getString("android.intent.extra.TEXT")
             // si txt différent de null alors txt contient maintenant une référence vers un String
             // avec l’adresse Url
             // de la page qui s’affichait dans le navigateur
@@ -94,7 +96,7 @@ class SauvegardeActivity : AppCompatActivity() {
         //Log.d("INSERT", "Insertion mot : $resultInsertion")
     } */
 
-    fun addMot(view: View) {
+    private fun addMot() {
         //verif mot init non vide
         val motInit = binding.word.text.toString().trim()
         //verif mot trad nn vide
@@ -116,7 +118,7 @@ class SauvegardeActivity : AppCompatActivity() {
             }
             // TODO check si le mot n'a pas deja ete add
             // ajout dans la bdd
-            val mot = Mot(motInit, motTrad, dicoURL, dicoID,true, 0)
+            val mot = Mot(motInit, motTrad, dicoURL, dicoID, true, langueInit, langueTrad, 0)
             val resultInsertion = model.insertMot(mot)
             Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
 
