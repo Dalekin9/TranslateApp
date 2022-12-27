@@ -4,10 +4,15 @@ import androidx.room.*
 import androidx.room.Dao
 import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
-import kotlin.concurrent.thread
 
 @Dao
 public abstract class Dao{
+
+    /*
+    **************
+    * INSERTIONS *
+    **************
+     */
 
     @Insert(entity = Dictionnaire::class, onConflict = OnConflictStrategy.IGNORE)
     abstract fun insertDico(vararg dictionnaire: Dictionnaire):List<Long>
@@ -15,11 +20,39 @@ public abstract class Dao{
     @Insert(entity = Mot::class, onConflict = OnConflictStrategy.IGNORE)
     abstract fun insertMot(vararg mot: Mot):List<Long>
 
+    /*
+    **********
+    * UPDATE *
+    **********
+     */
+
+    @Update
+    abstract fun updateMot(mot: Mot): Int
+
+
+    /*
+    **********
+    * REMOVE *
+    **********
+     */
+
+    @Delete
+    abstract fun deleteMot(mot: Mot): Int
+
+    /*
+    *********
+    * LOADS *
+    *********
+     */
+
     @Query("SELECT * FROM Dictionnaire")
     abstract fun loadAllDictionnaires(): LiveData<List<Dictionnaire>>
 
     @Query("SELECT * FROM Mot")
     abstract fun loadAllMots():LiveData<List<Mot>>
+
+    @Query("SELECT * FROM Mot WHERE toLearn = :learn")
+    abstract fun loadAllMotsNeedToBeLearn(learn: Boolean): LiveData<List<Mot>>
 
     //@Query("SELECT * FROM Dictionnaire WHERE url LIKE 'http_//%' || :url || '.%' AND startLanguage = :startLang AND endLanguage = :endLang ")
     @Query("SELECT * FROM Dictionnaire WHERE url LIKE :url AND startLanguage = :startLang AND endLanguage = :endLang ")
@@ -36,5 +69,15 @@ public abstract class Dao{
         insertDico(dictionnaire)
         insertMot(mot)
     }
+
+    @Query("SELECT * FROM Mot WHERE initLanguage = :startLang AND tradLanguage = :endLang AND toLearn = :learn")
+    abstract fun loadAllMotsNeedToBeLearnWithSpecificLanguages(
+        learn: Boolean,
+        startLang: String,
+        endLang: String
+    ): List<Mot>
+
+    @Query("SELECT * FROM Mot WHERE initLanguage = :startLang AND tradLanguage = :endLang")
+    abstract fun loadCertainsMot(startLang: String, endLang: String): List<Mot>
 
 }

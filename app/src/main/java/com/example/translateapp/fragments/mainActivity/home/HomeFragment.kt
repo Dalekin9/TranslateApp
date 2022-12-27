@@ -1,10 +1,14 @@
 package com.example.translateapp.fragments.mainActivity.home
 
+import android.app.AlarmManager
+import android.app.PendingIntent
 import com.example.translateapp.R
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,9 +16,13 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.databinding.FragmentHomeBinding
+import com.example.translateapp.service.NotificationsService
+import java.util.*
 
 
 class HomeFragment : Fragment() {
@@ -27,6 +35,7 @@ class HomeFragment : Fragment() {
 
     lateinit var homeViewModel: HomeViewModel
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -63,6 +72,42 @@ class HomeFragment : Fragment() {
         val buttonSearch: Button = binding.searchBut
         buttonSearch.setOnClickListener(search)
 
+        /*
+        * Lancement de l'alarme programmée pour 8h30
+        */
+
+        /* TODO ajoute en extra, le nb voulue grace a sharedPreferences */
+        val serviceIntent = Intent(requireContext(), NotificationsService::class.java)
+        val pendingIntent = PendingIntent.getService(
+            requireContext(),
+            0,
+            serviceIntent,
+            PendingIntent.FLAG_IMMUTABLE
+        )
+
+        /* calculer le moment de demarrage d'alarme */
+        /* TODO voir comment modifier l'heure, surement via les sharedPreferences
+        *   mais surtout voir si cela est pris en compte lors du changement ds les parametres */
+
+        //amorcer Alarme
+        val alarmManager =
+            requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+
+        /*
+        val calendar: Calendar = Calendar.getInstance().apply {
+            timeInMillis = System.currentTimeMillis()
+            set(Calendar.HOUR_OF_DAY, 17)
+            set(Calendar.MINUTE, 29)
+        }
+        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
+        */
+
+        alarmManager.setExact(
+            AlarmManager.ELAPSED_REALTIME_WAKEUP,
+            SystemClock.elapsedRealtime() + 15 * 1000,
+            pendingIntent
+        )
+
         return root
     }
 
@@ -71,17 +116,11 @@ class HomeFragment : Fragment() {
         _binding = null
     }
 
-    /*
-    fun data(view: View) {
-        val act = Intent(activity, DataActivity::class.java)
-        startActivity(act)
-    }
-     */
-
     /**
      * ClickListener du bouton buttonSearch
+     * lance une page web selon les langues de traduction et le mot voulu
      */
-    private val search = View.OnClickListener() {
+    private val search = View.OnClickListener {
         val intent = Intent(Intent.ACTION_VIEW)
         val dico = binding.dictionnary.selectedItem.toString()
         val startLang = binding.languesourc.selectedItem.toString()
@@ -91,7 +130,7 @@ class HomeFragment : Fragment() {
         var url = "http://www.google.fr/search?q=traduction+$mot $endLang"
 
         homeViewModel.loadMot(mot, endLang)
-        if(homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()){   //Cas
+        if (homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()) {   //Cas
             url = homeViewModel.certainsMots.value!![0].urlTransl
         }else{
             homeViewModel.loadDictionnaire(dico, startLang, endLang)

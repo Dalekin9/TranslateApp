@@ -12,14 +12,19 @@
         tools:layout="@layout/fragment_home" />
 
     <fragment
-        android:id="@+id/navigation_dashboard"
-        android:name="com.example.translateapp.fragments.mainActivity.dictionnaire.DictionnaireFragment"
-        android:label="@string/title_dashboard"
-        tools:layout="@layout/fragment_dashboard" />
+        android:id="@+id/navigation_jeu"
+        android:name="com.example.translateapp.fragments.mainActivity.jeu.JeuFragment"
+        android:label="@string/title_dashboard" />
 
     <fragment
-        android:id="@+id/navigation_notifications"
-        android:name="com.example.translateapp.fragments.mainActivity.notifications.NotificationsFragment"
-        android:label="@string/title_notifications"
-        tools:layout="@layout/fragment_notifications" />
+        android:id="@+id/navigation_statistiques"
+        android:name="com.example.translateapp.fragments.mainActivity.statistiques.StatistiquesFragment"
+        android:label="stats"
+        tools:layout="@layout/fragment_stats" />
+
+    <fragment
+        android:id="@+id/navigation_parametres"
+        android:name="com.example.translateapp.fragments.mainActivity.parametres.ParametresFragment"
+        android:label="param"
+        tools:layout="@layout/fragment_stats" />
 </navigation>

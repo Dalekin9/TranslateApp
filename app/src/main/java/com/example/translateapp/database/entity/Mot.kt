@@ -2,7 +2,6 @@ package com.example.translateapp.database.entity
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
-import com.example.translateapp.database.entity.Dictionnaire
 
 @Entity(tableName = "mot",
     foreignKeys = [ForeignKey (
@@ -13,12 +12,14 @@ import com.example.translateapp.database.entity.Dictionnaire
         onDelete = ForeignKey.CASCADE)])
 
 data class Mot(
-    var word:String,
-    var translation:String,
-    var urlTransl:String,
-    var dictionnary:String,
-    var toLearn:Boolean,
+    var word: String,
+    var translation: String,
+    var urlTransl: String,
+    var dictionnary: Long,
+    var toLearn: Boolean,
+    var initLanguage: String,
+    var tradLanguage: String,
     //var learningEnding:Date,
-    var knowledge:Int,
+    var knowledge: Int,
     @PrimaryKey(autoGenerate = true) val idMot: Long = 0
 )
