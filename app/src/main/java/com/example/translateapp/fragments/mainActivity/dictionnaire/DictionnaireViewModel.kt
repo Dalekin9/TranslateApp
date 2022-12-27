@@ -18,6 +18,8 @@ class DictionnaireViewModel(application: Application) : AndroidViewModel(applica
 
     private val dao = DicoBD.getDatabase(application).MyDao()
 
+    var mots : LiveData<List<Mot>> = dao.loadAllMots()
+
     val insertInfo = MutableLiveData<Long>(0)
     fun insertMot(vararg mot: Mot){
         thread{
@@ -25,6 +27,4 @@ class DictionnaireViewModel(application: Application) : AndroidViewModel(applica
             insertInfo.postValue(if(l[0] == -1L) -1L else l[0])
         }
     }
-
-    fun loadAllMots() = dao.loadAllMots()
 }

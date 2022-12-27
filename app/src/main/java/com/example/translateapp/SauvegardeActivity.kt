@@ -45,21 +45,21 @@ class SauvegardeActivity : AppCompatActivity() {
             //check if dico existe
             val langueInit = binding.languesourc.selectedItem.toString()
             val langueTrad = binding.languedest.selectedItem.toString()
-            val isDico = model.loadDictionnaire(dicoURL, langueInit, langueTrad)
+            model.loadDictionnaire(dicoURL, langueInit, langueTrad)
             // si oui mettre a jour les vars
-            if (isDico.value != null) {
-                dicoID = isDico.value!!.idDico
+            if (model.certainsDictionnaires.value != null) {
+                dicoID = model.certainsDictionnaires.value!![0].idDico
             } else {
                 // sinon creer un dico + insertDico + mettre a jour les vars
                 val dico = Dictionnaire(dicoURL, langueInit, langueTrad)
-                dicoID = 2
-                val resultInsertion = model.insertDico(dico)
+                val mot = Mot(motInit, motTrad, dicoURL, dicoURL,true, 0)
+                model.insertMotAndDictionnaireOfMot(mot, dico)
                 Log.d("INSERT", "Insertion dico : ${model.insertInfo.value}")
             }
             // TODO check si le mot n'a pas deja ete add
             // ajout dans la bdd
-            val mot = Mot(motInit, motTrad, dicoURL, dicoID,true, 0)
-            val resultInsertion = model.insertMot(mot)
+            //val mot = Mot(motInit, motTrad, dicoURL, dicoID,true, 0)
+            //model.insertMot(mot)
             Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
 
             val act = Intent(this, MainActivity::class.java)

@@ -5,11 +5,11 @@
     <string name="word">Word</string>
     <string name="traduction">Traduction</string>
 
-    <string-array name="spinner_entries">
+    <array name="spinner_entries">
         <item>Google</item>
-    </string-array>
+    </array>
 
-    <string-array name="langSpinner_entries">
+    <array name="langSpinner_entries">
         <item>Français</item>
         <item>Anglais</item>
         <item>Espagnol</item>
@@ -18,7 +18,7 @@
         <item>Allemand</item>
         <item>Portugais</item>
         <item>Indien</item>
-    </string-array>
+    </array>
     <string name="title_activity_main">MainActivity</string>
     <string name="title_home">Trad</string>
     <string name="title_dashboard">Data</string>

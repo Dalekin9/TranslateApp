@@ -27,7 +27,6 @@ class DictionnaireFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         dictionnaireViewModel = ViewModelProvider(this).get(DictionnaireViewModel::class.java)
 
 
@@ -44,7 +43,7 @@ class DictionnaireFragment : Fragment() {
         binding.recyclerView.adapter = adapter
         binding.recyclerView.layoutManager = LinearLayoutManager(context)
 
-        dictionnaireViewModel.loadAllMots().observe(viewLifecycleOwner) {
+        dictionnaireViewModel.mots.observe(viewLifecycleOwner) {
             Log.i("INFO", "dans loadAll observer")
             adapter.motList = it
             adapter.notifyDataSetChanged()
@@ -52,11 +51,9 @@ class DictionnaireFragment : Fragment() {
 
         dictionnaireViewModel.insertInfo.observe(viewLifecycleOwner) {
             Log.i("INFO", "dans insertInfo observer ${dictionnaireViewModel.insertInfo.value}")
-            dictionnaireViewModel.loadAllMots().value?.let { it1 -> adapter.setNewPaysList(it1) }
+            dictionnaireViewModel.mots.value?.let { it1 -> adapter.setNewPaysList(it1) }
             adapter.notifyDataSetChanged()
         }
-
-        dictionnaireViewModel.loadAllMots()
 
         return root
     }

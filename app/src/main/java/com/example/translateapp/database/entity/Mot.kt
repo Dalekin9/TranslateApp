@@ -4,12 +4,19 @@ import androidx.room.ForeignKey
 import androidx.room.PrimaryKey
 import com.example.translateapp.database.entity.Dictionnaire
 
-@Entity()
+@Entity(tableName = "mot",
+    foreignKeys = [ForeignKey (
+        entity = Dictionnaire::class,
+        parentColumns = ["url"],
+        childColumns = ["dictionnary"],
+        deferred = true,
+        onDelete = ForeignKey.CASCADE)])
+
 data class Mot(
     var word:String,
     var translation:String,
     var urlTransl:String,
-    var dictionnary:Long,
+    var dictionnary:String,
     var toLearn:Boolean,
     //var learningEnding:Date,
     var knowledge:Int,

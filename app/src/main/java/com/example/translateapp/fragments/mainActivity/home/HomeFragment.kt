@@ -1,16 +1,21 @@
 package com.example.translateapp.fragments.mainActivity.home
 
+import com.example.translateapp.R
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.databinding.FragmentHomeBinding
+
 
 class HomeFragment : Fragment() {
 
@@ -38,6 +43,23 @@ class HomeFragment : Fragment() {
             textView.text = it
         }
 
+        val dicoSpinner: Spinner = binding.dictionnary
+        val dictionnaries = requireActivity().resources.getStringArray(R.array.spinner_entries).toMutableList()
+
+        val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
+            requireActivity(),
+            androidx.transition.R.layout.support_simple_spinner_dropdown_item, dictionnaries
+        )
+
+        dicoSpinner.adapter = adapter
+
+        homeViewModel.dictionnaires.observe(viewLifecycleOwner){
+            adapter.clear()
+            adapter.add("Google")
+            adapter.addAll(it.map { d -> d.url })
+            dicoSpinner.adapter = adapter
+        }
+
         val buttonSearch: Button = binding.searchBut
         buttonSearch.setOnClickListener(search)
 
@@ -60,7 +82,6 @@ class HomeFragment : Fragment() {
      * ClickListener du bouton buttonSearch
      */
     private val search = View.OnClickListener() {
-        it ->
         val intent = Intent(Intent.ACTION_VIEW)
         val dico = binding.dictionnary.selectedItem.toString()
         val startLang = binding.languesourc.selectedItem.toString()
