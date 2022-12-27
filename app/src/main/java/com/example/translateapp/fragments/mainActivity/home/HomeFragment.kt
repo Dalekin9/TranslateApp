@@ -127,7 +127,7 @@ class HomeFragment : Fragment() {
         val endLang = binding.languedest.selectedItem.toString()
         val mot = binding.word.text.toString()
 
-        var url = "http://www.google.fr/search?q=traduction+$mot $endLang"
+        var url = "http://www.google.fr/search?q=traduction+$mot+$endLang"
 
         homeViewModel.loadMot(mot, endLang)
         if (homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()) {   //Cas

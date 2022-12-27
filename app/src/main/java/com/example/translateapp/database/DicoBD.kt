@@ -7,7 +7,7 @@ import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
 import kotlin.jvm.Volatile
 
-@Database(entities = [Dictionnaire::class, Mot::class], version = 4)
+@Database(entities = [Dictionnaire::class, Mot::class], version = 5)
 abstract class DicoBD : RoomDatabase() {
 
         abstract fun MyDao() : Dao

@@ -15,7 +15,7 @@ data class Mot(
     var word: String,
     var translation: String,
     var urlTransl: String,
-    var dictionnary: Long,
+    var dictionnary: String,
     var toLearn: Boolean,
     var initLanguage: String,
     var tradLanguage: String,

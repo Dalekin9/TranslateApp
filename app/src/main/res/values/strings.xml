@@ -24,10 +24,5 @@
         <item>Portugais</item>
         <item>Indien</item>
     </array>
-    <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Trad</string>
-    <string name="title_dashboard">Data</string>
-    <string name="title_notifications">Notifications</string>
-    <string name="title_activity_test">TestActivity</string>
 
 </resources>
