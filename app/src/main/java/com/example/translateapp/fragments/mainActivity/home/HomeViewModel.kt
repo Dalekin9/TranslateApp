@@ -30,6 +30,10 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
 
     var certainsDictionnaires = MutableLiveData<List<Dictionnaire>>()
 
+    var currentLangDictionnaires = MutableLiveData<List<Dictionnaire>>()
+
 
     fun loadDictionnaire(url: String, startLang: String, endLang: String) = thread{ certainsDictionnaires.postValue(dao.loadDictionnaire(url, startLang, endLang))}
+
+    fun loadSameLangDictionnaires(startLang: String, endLang: String) =thread{ currentLangDictionnaires.postValue(dao.loadSameLangDictionnaires(startLang, endLang))}
 }
