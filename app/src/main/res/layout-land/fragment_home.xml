@@ -8,70 +8,70 @@
 
     <EditText
         android:id="@+id/word"
-        android:layout_width="0dp"
+        android:layout_width="200dp"
         android:layout_height="48dp"
-        android:layout_marginStart="90dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="90dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="50dp"
         android:autofillHints=""
         android:gravity="center"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="@string/word"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/dictionnary"
-        app:layout_constraintVertical_bias="0.0"
         tools:ignore="LabelFor" />
 
     <Button
         android:id="@+id/searchBut"
-        android:layout_width="140dp"
-        android:layout_height="87dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/search"
-        android:textColor="@color/black"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/languedest"
-        app:layout_constraintVertical_bias="0.25" />
-
-    <Spinner
-        android:id="@+id/dictionnary"
-        android:layout_width="0dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="50dp"
-        android:layout_marginEnd="50dp"
-        android:entries="@array/spinner_entries"
-        android:gravity="center"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.13999999" />
+        app:layout_constraintVertical_bias="0.78" />
+
+    <Spinner
+        android:id="@+id/dictionnary"
+        android:layout_width="200dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="70dp"
+        android:entries="@array/spinner_entries"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/languesourc"
         android:layout_width="160dp"
         android:layout_height="50dp"
         android:layout_marginTop="70dp"
+        android:layout_marginEnd="50dp"
         android:entries="@array/langSpinner_entries"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/word" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Spinner
         android:id="@+id/languedest"
         android:layout_width="160dp"
         android:layout_height="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="50dp"
         android:entries="@array/langSpinner_entries"
-        android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/languesourc" />
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="36dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="288dp"
+        android:foreground="@drawable/ic_arrow_right_alt"
+        app:layout_constraintEnd_toStartOf="@+id/languesourc"
+        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintStart_toEndOf="@+id/languedest"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

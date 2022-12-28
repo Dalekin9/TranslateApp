@@ -46,8 +46,18 @@ class HomeFragment : Fragment() {
         val root: View = binding.root
 
 
+        if (savedInstanceState != null) {
+            Log.i("SAVED", "dans savedInstance")
+            binding.languesourc.setSelection(savedInstanceState.getInt("spinner1", 0))
+            binding.languedest.setSelection(savedInstanceState.getInt("spinner2", 0))
+            binding.dictionnary.setSelection(savedInstanceState.getInt("dico"))
+            binding.word.setText(savedInstanceState.getString("mot"))
+        }
+
+
         val dicoSpinner: Spinner = binding.dictionnary
-        val dictionnaries = requireActivity().resources.getStringArray(R.array.spinner_entries).toMutableList()
+        val dictionnaries =
+            requireActivity().resources.getStringArray(R.array.spinner_entries).toMutableList()
 
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireActivity(),
@@ -128,6 +138,18 @@ class HomeFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        if (_binding != null) {
+            outState.putInt("spinner1", binding.languesourc.selectedItemPosition)
+            outState.putInt("spinner2", binding.languedest.selectedItemPosition)
+            outState.putInt("dico", binding.dictionnary.selectedItemPosition)
+            outState.putString("mot", binding.word.text.toString())
+        }
+    }
+
 
     /**
      * ClickListener du bouton buttonSearch

@@ -34,25 +34,11 @@ class SauvegardeActivity : AppCompatActivity() {
             }
         }
 
-        model.allMots
-
-        model.allDictionnaires
-
-        model.allMots.observe(this) {
-            Log.i("INSERT TEST", "j'ai ${it.size} mots")
-            for (mot: Mot in it) {
-                Log.i(
-                    "INSERT TEST",
-                    "mot ${mot.idMot}: ${mot.word}, ${mot.translation}, ${mot.dictionnary}, ${mot.urlTransl}"
-                )
-            }
-        }
-
-        model.allDictionnaires.observe(this) {
-            Log.i("INSERT TEST", "j'ai ${it.size} dictionnaires")
-            for (mot: Dictionnaire in it) {
-                Log.i("INSERT TEST", "dico ${mot.idDico}: ${mot.url}")
-            }
+        if (savedInstanceState != null) {
+            binding.langueSrcToBD.setSelection(savedInstanceState.getInt("langue1", 0))
+            binding.langueDestToBD.setSelection(savedInstanceState.getInt("langue2", 0))
+            binding.wordToBD.setText(savedInstanceState.getString("word"))
+            binding.translateToBD.setText(savedInstanceState.getString("translate"))
         }
 
         model.certainsDictionnaires.observe(this) {
@@ -112,6 +98,14 @@ class SauvegardeActivity : AppCompatActivity() {
             val toast = Toast.makeText(applicationContext, text, duration)
             toast.show()
         }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("langue1", binding.langueSrcToBD.selectedItemPosition)
+        outState.putInt("langue2", binding.langueDestToBD.selectedItemPosition)
+        outState.putString("word", binding.wordToBD.text.toString())
+        outState.putString("translate", binding.translateToBD.text.toString())
     }
 
 }

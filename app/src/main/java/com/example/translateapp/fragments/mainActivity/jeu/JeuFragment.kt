@@ -54,7 +54,7 @@ class JeuFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                updateData()
+                    updateData()
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
@@ -68,14 +68,13 @@ class JeuFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
+                Log.i("JEUFRAGMENT", "dans endLang listener")
                 updateData()
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {
             }
         }
-
-        updateData()
 
         jeuModel.listMots.observe(viewLifecycleOwner) {
             Log.i("JEUFRAGMENT", "observer jeu model")
@@ -99,7 +98,26 @@ class JeuFragment : Fragment() {
 
         }
 
+        if (savedInstanceState != null) {
+            Log.i("SAVED", "saved Instance")
+            binding.wordToFind.text = savedInstanceState.getString("word")
+            binding.translateToFind.text = savedInstanceState.getString("translation")
+            binding.langue1.setSelection(savedInstanceState.getInt("langue1"))
+            binding.langue2.setSelection(savedInstanceState.getInt("langue2"))
+            listeMots.addAll(jeuModel.listMots.value!!)
+        } else {
+            updateData()
+        }
+
         return root
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putInt("langue1", binding.langue1.selectedItemPosition)
+        outState.putInt("langue2", binding.langue2.selectedItemPosition)
+        outState.putString("word", binding.wordToFind.text.toString())
+        outState.putString("translation", binding.translateToFind.text.toString())
     }
 
     fun updateData() {

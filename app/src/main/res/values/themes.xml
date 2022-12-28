@@ -1,6 +1,6 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.TranslateApp" parent="Theme.AppCompat.DayNight.NoActionBar">
+    <style name="Theme.TranslateApp.NoActionBar" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#51A6CD</item>
         <item name="colorPrimaryVariant">#E42525</item>
@@ -12,14 +12,7 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">#673AB7</item>
         <!-- Customize your theme here. -->
+        <item name="android:colorAccent">#8BC34A</item>
     </style>
 
-    <style name="Theme.TranslateApp.NoActionBar">
-        <item name="windowActionBar">false</item>
-        <item name="windowNoTitle">true</item>
-    </style>
-
-    <style name="Theme.TranslateApp.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.TranslateApp.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
