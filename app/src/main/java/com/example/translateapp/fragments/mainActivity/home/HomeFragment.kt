@@ -11,16 +11,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.Button
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
+import android.widget.AdapterView.OnItemSelectedListener
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.R
+import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.databinding.FragmentHomeBinding
 import com.example.translateapp.service.NotificationsService
 import java.util.*
@@ -45,6 +44,36 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        val sourceSpinner = binding.languesourc
+        val destSpinner = binding.languedest
+        sourceSpinner.onItemSelectedListener = object : OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                homeViewModel.loadSameLangDictionnaires(sourceSpinner.selectedItem.toString(),
+                                                        destSpinner.selectedItem.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+        destSpinner.onItemSelectedListener = object : OnItemSelectedListener{
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                homeViewModel.loadSameLangDictionnaires(sourceSpinner.selectedItem.toString(),
+                    destSpinner.selectedItem.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
 
         if (savedInstanceState != null) {
             Log.i("SAVED", "dans savedInstance")
@@ -56,20 +85,21 @@ class HomeFragment : Fragment() {
 
 
         val dicoSpinner: Spinner = binding.dictionnary
-        val dictionnaries =
-            requireActivity().resources.getStringArray(R.array.spinner_entries).toMutableList()
+        val dictionnaries = requireActivity().resources.getStringArray(R.array.spinner_entries).toMutableList()
 
         val adapter: ArrayAdapter<String> = ArrayAdapter<String>(
             requireActivity(),
-            androidx.transition.R.layout.support_simple_spinner_dropdown_item, dictionnaries
+            androidx.transition.R.layout.support_simple_spinner_dropdown_item,
+            dictionnaries
         )
 
         dicoSpinner.adapter = adapter
 
-        homeViewModel.dictionnaires.observe(viewLifecycleOwner) {
+        homeViewModel.currentLangDictionnaires.observe(viewLifecycleOwner) {
             adapter.clear()
             adapter.add("Google")
-            adapter.addAll(it.map { d -> d.url })
+            val names = getDicoNames(it)
+            adapter.addAll(names)
             dicoSpinner.adapter = adapter
         }
 
@@ -137,6 +167,14 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    fun getDicoNames(dicos :List<Dictionnaire>) : List<String>{
+        val urls = dicos.map { d -> d.url }
+        val separatedUrls = urls.map{ u -> u.split("/") }
+        val nameZone = separatedUrls.map{ s -> s[2]}
+        val names = nameZone.map { z -> z.replaceBefore('.', "").substringAfter('.') }
+        return names
     }
 
 

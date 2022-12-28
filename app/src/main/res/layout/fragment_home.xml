@@ -53,7 +53,7 @@
         app:layout_constraintVertical_bias="0.13999999" />
 
     <Spinner
-        android:id="@+id/languesourc"
+        android:id="@+id/languedest"
         android:layout_width="160dp"
         android:layout_height="50dp"
         android:layout_marginTop="70dp"
@@ -64,7 +64,7 @@
         app:layout_constraintTop_toBottomOf="@+id/word" />
 
     <Spinner
-        android:id="@+id/languedest"
+        android:id="@+id/languesourc"
         android:layout_width="160dp"
         android:layout_height="50dp"
         android:layout_marginTop="30dp"

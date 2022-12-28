@@ -62,6 +62,12 @@ public abstract class Dao{
         endLang: String
     ): List<Dictionnaire>
 
+    @Query("SELECT * FROM Dictionnaire WHERE startLanguage = :startLang AND endLanguage = :endLang ")
+    abstract fun loadSameLangDictionnaires(
+        startLang: String,
+        endLang: String
+    ): List<Dictionnaire>
+
     /*
     @Query("SELECT * FROM Dictionnaire INNER JOIN Mot WHERE word = :mot AND url = dictionnary AND endLanguage = :endLang")
     abstract fun loadDictionnaireDeMot(mot: String, endLang: String): List<Dictionnaire>
