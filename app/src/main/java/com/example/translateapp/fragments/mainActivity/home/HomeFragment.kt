@@ -75,13 +75,7 @@ class HomeFragment : Fragment() {
             }
         }
 
-        if (savedInstanceState != null) {
-            Log.i("SAVED", "dans savedInstance")
-            binding.languesourc.setSelection(savedInstanceState.getInt("spinner1", 0))
-            binding.languedest.setSelection(savedInstanceState.getInt("spinner2", 0))
-            binding.dictionnary.setSelection(savedInstanceState.getInt("dico"))
-            binding.word.setText(savedInstanceState.getString("mot"))
-        }
+
 
 
         val dicoSpinner: Spinner = binding.dictionnary
@@ -160,6 +154,14 @@ class HomeFragment : Fragment() {
             SystemClock.elapsedRealtime() + 15 * 1000,
             pendingIntent
         )
+
+        if (savedInstanceState != null) {
+            Log.i("SAVED", "dans savedInstance")
+            binding.languesourc.setSelection(savedInstanceState.getInt("spinner1", 0))
+            binding.languedest.setSelection(savedInstanceState.getInt("spinner2", 0))
+            binding.dictionnary.setSelection(savedInstanceState.getInt("dico"))
+            binding.word.setText(savedInstanceState.getString("mot"))
+        }
 
         return root
     }

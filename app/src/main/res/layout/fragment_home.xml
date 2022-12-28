@@ -56,22 +56,22 @@
         android:id="@+id/languedest"
         android:layout_width="160dp"
         android:layout_height="50dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="32dp"
         android:entries="@array/langSpinner_entries"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/word" />
+        app:layout_constraintTop_toBottomOf="@+id/languesourc" />
 
     <Spinner
         android:id="@+id/languesourc"
         android:layout_width="160dp"
         android:layout_height="50dp"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="70dp"
         android:entries="@array/langSpinner_entries"
         android:spinnerMode="dropdown"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/languesourc" />
+        app:layout_constraintTop_toBottomOf="@+id/word" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
