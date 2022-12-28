@@ -5,46 +5,41 @@ import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.translateapp.database.DicoApplication
-import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
-import kotlin.concurrent.thread
 
 class ServiceModel(application: Application) : AndroidViewModel(application) {
 
     val dao = (application as DicoApplication).database.MyDao()
 
-    //val allMots : LiveData<List<Mot>> = dao.loadAllMots()
-
-    var insertInfo = MutableLiveData<Long>(0)
-    var certainsDictionnaires = MutableLiveData<List<Dictionnaire>>()
-    var certainsMots = MutableLiveData<List<Mot>>()
-
-    fun insertDico(vararg dictionnaire: Dictionnaire) {
+    var updateInfo = MutableLiveData<Int>(0)
+    fun updateMot(mot: Mot) {
         Thread {
-            val l = dao.insertDico(*dictionnaire)
-            Log.d("INSERT", "dans Insertion dico")
-            insertInfo.postValue(if (l[0] == -1L) -1L else l[0])
+            val l = dao.updateMot(mot)
+            Log.d("REMOVE", "dans update mot, value $l")
+            updateInfo.postValue(l)
         }.start()
     }
 
-    fun insertMot(vararg mot: Mot) {
+    var loadMotsLearnLanguages = MutableLiveData<List<Mot>>()
+    fun loadAllMotNeedToBeLearnWithLanguages(bool: Boolean, langue1: String, langue2: String) {
         Thread {
-            val l = dao.insertMot(*mot)
-            Log.d("INSERT", "dans Insertion mot")
-            insertInfo.postValue(if (l[0] == -1L) -1L else l[0])
+            Log.d("REMOVE", "load all mots with languages")
+            loadMotsLearnLanguages.postValue(
+                dao.loadAllMotsNeedToBeLearnWithSpecificLanguages(
+                    bool,
+                    langue1,
+                    langue2
+                )
+            )
         }.start()
     }
 
-    fun loadAllDicos() = dao.loadAllDictionnaires()
+    var loadMotsLearn = MutableLiveData<List<Mot>>()
+    fun loadAllMotNeedToBeLearn(bool: Boolean) {
+        Thread {
+            Log.d("REMOVE", "load all mots")
+            loadMotsLearn.postValue(dao.loadAllMotsNeedToBeLearn(bool))
+        }.start()
+    }
 
-    fun loadAllMots() = dao.loadAllMots()
-
-    fun loadDictionnaire(url: String, startLang: String, endLang: String) =
-        dao.loadDictionnaire(url, startLang, endLang)
-
-    fun loadDictionnaireDeMot(mot: String, endLang: String) =
-        thread { certainsDictionnaires.postValue(dao.loadDictionnaireDeMot(mot, endLang)) }
-
-    fun loadMot(mot: String, endLang: String) =
-        thread { certainsMots.postValue(dao.loadMot(mot, endLang)) }
 }

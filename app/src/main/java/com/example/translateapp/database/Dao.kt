@@ -52,7 +52,7 @@ interface Dao {
     fun loadAllMots(): LiveData<List<Mot>>
 
     @Query("SELECT * FROM Mot WHERE toLearn = :learn")
-    fun loadAllMotsNeedToBeLearn(learn: Boolean): LiveData<List<Mot>>
+    fun loadAllMotsNeedToBeLearn(learn: Boolean): List<Mot>
 
     //@Query("SELECT * FROM Dictionnaire WHERE url LIKE 'http_//%' || :url || '.%' AND startLanguage = :startLang AND endLanguage = :endLang ")
     @Query("SELECT * FROM Dictionnaire WHERE url LIKE :url AND startLanguage = :startLang AND endLanguage = :endLang ")

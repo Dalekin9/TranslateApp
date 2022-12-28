@@ -21,6 +21,7 @@ import com.example.translateapp.database.entity.Mot
 import java.lang.Integer.min
 import kotlin.random.Random
 
+
 class NotificationsService : LifecycleService() {
 
     private val CHANNEL_ID = "message urgent"
@@ -32,20 +33,24 @@ class NotificationsService : LifecycleService() {
 
     private var data: List<Mot>? = null
 
+
     companion object {
         private val currentIdMotMap = mutableMapOf<Int, Mot>()
         lateinit var dao: Dao
+        private lateinit var model: ServiceModel
     }
 
     override fun onCreate() {
         super.onCreate()
+
+        model = ServiceModel(application)
 
         dao = (application as DicoApplication).database.MyDao()
         createNotificationChannel()
 
         Log.i("INFO NOTIF", "onCreate")
 
-        dao.loadAllMotsNeedToBeLearn(true).observe(this) {
+        model.loadMotsLearn.observe(this) {
             data = it
             Log.i("INFO NOTIF", "observer")
             if (data != null) {
@@ -99,7 +104,7 @@ class NotificationsService : LifecycleService() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
         Log.i("INFO NOTIF", "onStartCommand")
-        dao.loadAllMotsNeedToBeLearn(true)
+        model.loadAllMotNeedToBeLearn(true)
 
         return START_NOT_STICKY
     }
@@ -123,7 +128,27 @@ class NotificationsService : LifecycleService() {
 
     class NotifListenerService : NotificationListenerService() {
 
-        override fun onNotificationRemoved(sbn: StatusBarNotification) {
+        override fun onCreate() {
+            Log.i("INFOS", "onCreate")
+            super.onCreate()
+        }
+
+        override fun onListenerConnected() {
+            super.onListenerConnected()
+            Log.i("INFOS", "onListenerConnected")
+        }
+
+        override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+            Log.i("INFOS", "onStartCommand")
+            return super.onStartCommand(intent, flags, startId)
+        }
+
+        override fun onNotificationPosted(sbn: StatusBarNotification?) {
+            super.onNotificationPosted(sbn)
+            Log.e("INFOS", "onNotificationsPosted")
+        }
+
+        override fun onNotificationRemoved(sbn: StatusBarNotification?) {
             super.onNotificationRemoved(sbn)
             /*
             -- TODO recuper id de la notif, et le remove de la liste d'id -- OK
@@ -132,23 +157,28 @@ class NotificationsService : LifecycleService() {
             -- TODO update le boolean learn si knowledge = 3 -- OK
             TODO update la date d'apprentissage
              */
-            Log.i("INFO NOTIF", "dans onNotifRemove: ${currentIdMotMap.keys.size}")
+            Log.i("REMOVE", "dans onNotifRemove: ${currentIdMotMap.keys.size}")
 
             if (sbn != null) {
                 val id = sbn.id
-                val mot = currentIdMotMap[id]
+                val mot: Mot? = currentIdMotMap[id]
 
-                currentIdMotMap.remove(id)
-                Log.i("INFO NOTIF", "nb de id dans onNotifRemove: ${currentIdMotMap.keys.size}")
+
+                Log.i("REMOVE", "nb de id dans onNotifRemove: ${currentIdMotMap.keys.size}")
+                Log.i("REMOVE", "mot : ${mot?.word}")
 
                 if (mot != null) {
                     mot.knowledge += 1
+                    Log.i("REMOVE", "mot knowledge : ${mot.knowledge}")
                     if (mot.knowledge == 3) {
+                        Log.i("REMOVE", "mot knowledge == 3 => : ${mot.knowledge}")
                         mot.knowledge = 0
                         mot.toLearn = false
                     }
-                    dao.updateMot(mot)
+                    model.updateMot(mot)
                 }
+
+                currentIdMotMap.remove(id)
             }
         }
     }
