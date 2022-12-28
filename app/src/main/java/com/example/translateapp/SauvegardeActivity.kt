@@ -3,11 +3,13 @@ package com.example.translateapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
 import com.example.translateapp.databinding.ActivitySauvegardeBinding
+import kotlinx.coroutines.InternalCoroutinesApi
 
 class SauvegardeActivity : AppCompatActivity() {
 
@@ -38,8 +40,8 @@ class SauvegardeActivity : AppCompatActivity() {
         }
     }
 
-    /*
-    @OptIn(InternalCoroutinesApi::class)
+
+    /*@OptIn(InternalCoroutinesApi::class)
     fun addMot(view: View) {
         //verif mot init non vide
         val motInit = binding.word.text.toString().trim()
@@ -49,10 +51,10 @@ class SauvegardeActivity : AppCompatActivity() {
             //check if dico existe
             val langueInit = binding.languesourc.selectedItem.toString()
             val langueTrad = binding.languedest.selectedItem.toString()
-            val isDico = model.loadDictionnaire(dicoURL, langueInit, langueTrad)
+            model.loadDictionnaire(dicoURL, langueInit, langueTrad)
             // si oui mettre a jour les vars
-            if (isDico.value != null) {
-
+            if (model.certainsDictionnaires.value != null) {
+                dicoID = model.certainsDictionnaires.value!![0].idDico
                 Thread {
                     dicoID = isDico.value!!.idDico
                     // TODO check si le mot n'a pas deja ete add
@@ -94,7 +96,8 @@ class SauvegardeActivity : AppCompatActivity() {
         }
         // TODO affiche message pour pas que les champs soient vides
         //Log.d("INSERT", "Insertion mot : $resultInsertion")
-    } */
+    }*/
+
 
     private fun addMot() {
         //verif mot init non vide
@@ -105,22 +108,27 @@ class SauvegardeActivity : AppCompatActivity() {
             //check if dico existe
             val langueInit = binding.languesourc.selectedItem.toString()
             val langueTrad = binding.languedest.selectedItem.toString()
-            val isDico = model.loadDictionnaire(dicoURL, langueInit, langueTrad)
+            model.loadDictionnaire(dicoURL, langueInit, langueTrad)
             // si oui mettre a jour les vars
-            if (isDico.value != null) {
-                dicoID = isDico.value!!.idDico
+            if (model.certainsDictionnaires.value != null) {
+                dicoID = model.certainsDictionnaires.value!![0].idDico
             } else {
                 // sinon creer un dico + insertDico + mettre a jour les vars
                 val dico = Dictionnaire(dicoURL, langueInit, langueTrad)
-                dicoID = 2
-                val resultInsertion = model.insertDico(dico)
+                val mot = Mot(motInit, motTrad, dicoURL, dicoURL,true, langueInit, langueTrad, 0)
+                model.insertMotAndDictionnaireOfMot(mot, dico)
                 Log.d("INSERT", "Insertion dico : ${model.insertInfo.value}")
             }
-            // TODO check si le mot n'a pas deja ete add
-            // ajout dans la bdd
-            val mot = Mot(motInit, motTrad, dicoURL, dicoID, true, langueInit, langueTrad, 0)
-            val resultInsertion = model.insertMot(mot)
-            Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
+
+            model.loadMot(motInit, langueTrad)
+            if(model.certainsMots.value == null){
+                //Le mot n'a pas encore été ajouté à la bdd
+                val mot = Mot(motInit, motTrad, dicoURL, dicoURL, true, langueInit, langueTrad, 0)
+                model.insertMot(mot)
+                Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
+            }else{
+                //TODO: Afficher un toast "d'erreur" ?
+            }
 
             val act = Intent(this, MainActivity::class.java)
             startActivity(act)
