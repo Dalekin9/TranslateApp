@@ -14,6 +14,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationManagerCompat
@@ -28,8 +29,6 @@ class HomeFragment : Fragment() {
 
     private var _binding: FragmentHomeBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
 
     lateinit var homeViewModel: HomeViewModel
@@ -67,6 +66,10 @@ class HomeFragment : Fragment() {
         val buttonSearch: Button = binding.searchBut
         buttonSearch.setOnClickListener(search)
 
+        /**
+         * Permet d'obtenir l'accès aux notifications
+         * Afin d'actualiser les données quand on supprime une notification
+         */
         val enableds = context?.let { NotificationManagerCompat.getEnabledListenerPackages(it) }
         if (enableds != null) {
             var enable = false;
@@ -137,46 +140,27 @@ class HomeFragment : Fragment() {
         val endLang = binding.languedest.selectedItem.toString()
         val mot = binding.word.text.toString()
 
-        var url = "http://www.google.fr/search?q=traduction+$mot+$endLang"
+        if (mot.trim() == "") {
+            val text = "Remplissez les champs !"
+            val duration = Toast.LENGTH_SHORT
+            val toast = Toast.makeText(requireContext(), text, duration)
+            toast.show()
+        } else {
+            var url = "http://www.google.fr/search?q=traduction+$mot+$endLang"
 
-        homeViewModel.loadMot(mot, endLang)
-        if (homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()) {   //Cas
-            url = homeViewModel.certainsMots.value!![0].urlTransl
-        }else{
-            homeViewModel.loadDictionnaire(dico, startLang, endLang)
-            if(homeViewModel.certainsDictionnaires.value != null  && homeViewModel.certainsDictionnaires.value!!.isNotEmpty()){
-                url = homeViewModel.certainsDictionnaires.value!![0].url + mot
+            homeViewModel.loadMot(mot, endLang)
+            if (homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()) {   //Cas
+                url = homeViewModel.certainsMots.value!![0].urlTransl
+            } else {
+                homeViewModel.loadDictionnaire(dico, startLang, endLang)
+                if (homeViewModel.certainsDictionnaires.value != null && homeViewModel.certainsDictionnaires.value!!.isNotEmpty()) {
+                    url = homeViewModel.certainsDictionnaires.value!![0].url + mot
+                }
             }
+            intent.data = Uri.parse(url)
+            startActivity(intent)
         }
-        // TODO val urlDico -> get url pour le dico selectionné
 
-        intent.data = Uri.parse(url)
-        startActivity(intent)
     }
-
-    fun searchK(view: View){
-        val intent = Intent(Intent.ACTION_VIEW)
-        val dico = binding.dictionnary.selectedItem.toString()
-        val startLang = binding.languesourc.selectedItem.toString()
-        val endLang = binding.languedest.selectedItem.toString()
-        val mot = binding.word.text.toString()
-
-        var url = "http://www.google.fr/search?q=traduction+$mot $endLang"
-
-        homeViewModel.loadMot(mot, endLang)
-        if(homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()){   //Cas
-            url = homeViewModel.certainsMots.value!![0].urlTransl
-        }else{
-            homeViewModel.loadDictionnaire(dico, startLang, endLang)
-            if(homeViewModel.certainsDictionnaires.value != null  && homeViewModel.certainsDictionnaires.value!!.isNotEmpty()){
-                url = homeViewModel.certainsDictionnaires.value!![0].url + mot
-            }
-        }
-        // TODO val urlDico -> get url pour le dico selectionné
-
-        intent.data = Uri.parse(url)
-        startActivity(intent)
-    }
-
 
 }

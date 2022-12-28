@@ -151,10 +151,6 @@ class NotificationsService : LifecycleService() {
         override fun onNotificationRemoved(sbn: StatusBarNotification?) {
             super.onNotificationRemoved(sbn)
             /*
-            -- TODO recuper id de la notif, et le remove de la liste d'id -- OK
-            -- TODO remove le mot à apprendre de la liste -- OK
-            -- TODO add +1 dans le learn du mot -- OK
-            -- TODO update le boolean learn si knowledge = 3 -- OK
             TODO update la date d'apprentissage
              */
             Log.i("REMOVE", "dans onNotifRemove: ${currentIdMotMap.keys.size}")

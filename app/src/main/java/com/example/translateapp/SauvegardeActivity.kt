@@ -3,6 +3,7 @@ package com.example.translateapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.database.entity.Dictionnaire
@@ -28,11 +29,7 @@ class SauvegardeActivity : AppCompatActivity() {
 
         if (intent.action.equals("android.intent.action.SEND")) {
             val url = intent.extras?.getString("android.intent.extra.TEXT")
-            // si txt différent de null alors txt contient maintenant une référence vers un String
-            // avec l’adresse Url
-            // de la page qui s’affichait dans le navigateur
             if (url != null) {
-                binding.url.text = url
                 dicoURL = url
             }
         }
@@ -60,10 +57,10 @@ class SauvegardeActivity : AppCompatActivity() {
 
         model.certainsDictionnaires.observe(this) {
             Log.i("INSERT TEST", "j'ai ${it.size} dictionnaires")
-            val motInit = binding.word.text.toString().trim()
-            val motTrad = binding.wordTrad.text.toString().trim()
-            val langueInit = binding.languesourc.selectedItem.toString()
-            val langueTrad = binding.languedest.selectedItem.toString()
+            val motInit = binding.wordToBD.text.toString().trim()
+            val motTrad = binding.translateToBD.text.toString().trim()
+            val langueInit = binding.langueSrcToBD.selectedItem.toString()
+            val langueTrad = binding.langueDestToBD.selectedItem.toString()
             // si oui mettre a jour les vars
             if (it.isNotEmpty()) {
                 dicoID = model.certainsDictionnaires.value!![0].idDico
@@ -81,17 +78,20 @@ class SauvegardeActivity : AppCompatActivity() {
 
         model.certainsMots.observe(this) {
             Log.i("INSERT TEST", "j'ai ${it.size} mots")
-            val motInit = binding.word.text.toString().trim()
-            val motTrad = binding.wordTrad.text.toString().trim()
-            val langueInit = binding.languesourc.selectedItem.toString()
-            val langueTrad = binding.languedest.selectedItem.toString()
+            val motInit = binding.wordToBD.text.toString().trim()
+            val motTrad = binding.translateToBD.text.toString().trim()
+            val langueInit = binding.langueSrcToBD.selectedItem.toString()
+            val langueTrad = binding.langueDestToBD.selectedItem.toString()
             if (it.isEmpty()) {
                 //Le mot n'a pas encore été ajouté à la bdd
                 val mot = Mot(motInit, motTrad, dicoURL, dicoURL, true, langueInit, langueTrad, 0)
                 model.insertMot(mot)
                 Log.d("INSERT TEST", "on a un dico qui existe, et pas de mot existant")
             } else {
-                //TODO: Afficher un toast "d'erreur" ?
+                val text = "Ce mot est déjà présent dans nos données."
+                val duration = Toast.LENGTH_SHORT
+                val toast = Toast.makeText(applicationContext, text, duration)
+                toast.show()
                 Log.d("INSERT TEST", "on a un dico qui existe, et un mot existant")
             }
             val act = Intent(this, MainActivity::class.java)
@@ -100,14 +100,17 @@ class SauvegardeActivity : AppCompatActivity() {
     }
 
     private fun addMot() {
-        val motInit = binding.word.text.toString().trim()
-        val motTrad = binding.wordTrad.text.toString().trim()
+        val motInit = binding.wordToBD.text.toString().trim()
+        val motTrad = binding.translateToBD.text.toString().trim()
         if (motInit != "" && motTrad != "") {
-            val langueInit = binding.languesourc.selectedItem.toString()
-            val langueTrad = binding.languedest.selectedItem.toString()
+            val langueInit = binding.langueSrcToBD.selectedItem.toString()
+            val langueTrad = binding.langueDestToBD.selectedItem.toString()
             model.loadDictionnaire(dicoURL, langueInit, langueTrad)
         } else {
-            //TODO: Afficher un toast mots vide ?
+            val text = "Remplissez les champs !"
+            val duration = Toast.LENGTH_SHORT
+            val toast = Toast.makeText(applicationContext, text, duration)
+            toast.show()
         }
     }
 
