@@ -112,6 +112,11 @@ class JeuFragment : Fragment() {
             startLang.selectedItem.toString(),
             endLang.selectedItem.toString()
         )
+
+        mot = null;
+        binding.wordToFind.text = ""
+        binding.translateToFind.text = ""
+        listeMots.removeAll(listeMots.toList())
     }
 
     private val voirLaReponse = View.OnClickListener {

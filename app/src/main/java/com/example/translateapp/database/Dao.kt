@@ -49,23 +49,29 @@ public abstract class Dao{
     abstract fun loadAllDictionnaires(): LiveData<List<Dictionnaire>>
 
     @Query("SELECT * FROM Mot")
-    abstract fun loadAllMots():LiveData<List<Mot>>
+    abstract fun loadAllMots(): LiveData<List<Mot>>
 
     @Query("SELECT * FROM Mot WHERE toLearn = :learn")
-    abstract fun loadAllMotsNeedToBeLearn(learn: Boolean): LiveData<List<Mot>>
+    abstract fun loadAllMotsNeedToBeLearn(learn: Boolean): List<Mot>
 
     //@Query("SELECT * FROM Dictionnaire WHERE url LIKE 'http_//%' || :url || '.%' AND startLanguage = :startLang AND endLanguage = :endLang ")
     @Query("SELECT * FROM Dictionnaire WHERE url LIKE :url AND startLanguage = :startLang AND endLanguage = :endLang ")
-    abstract fun loadDictionnaire(url: String, startLang: String, endLang: String): List<Dictionnaire>
+    abstract fun loadDictionnaire(
+        url: String,
+        startLang: String,
+        endLang: String
+    ): List<Dictionnaire>
 
-    @Query("SELECT * FROM Dictionnaire INNER JOIN Mot WHERE word = :mot AND idDico = dictionnary AND endLanguage = :endLang")
+    /*
+    @Query("SELECT * FROM Dictionnaire INNER JOIN Mot WHERE word = :mot AND url = dictionnary AND endLanguage = :endLang")
     abstract fun loadDictionnaireDeMot(mot: String, endLang: String): List<Dictionnaire>
+    */
 
-    @Query("SELECT * FROM Mot INNER JOIN Dictionnaire WHERE word = :mot AND idDico = dictionnary AND endLanguage = :endLang")
+    @Query("SELECT * FROM Mot INNER JOIN Dictionnaire WHERE word = :mot AND url = dictionnary AND endLanguage = :endLang")
     abstract fun loadMot(mot: String, endLang: String): List<Mot>
 
     @Transaction
-    open fun insertMotAndDictionnaireOfMot(mot : Mot, dictionnaire : Dictionnaire){
+    open fun insertMotAndDictionnaireOfMot(mot: Mot, dictionnaire: Dictionnaire) {
         insertDico(dictionnaire)
         insertMot(mot)
     }
@@ -77,7 +83,8 @@ public abstract class Dao{
         endLang: String
     ): List<Mot>
 
+    /*
     @Query("SELECT * FROM Mot WHERE initLanguage = :startLang AND tradLanguage = :endLang")
     abstract fun loadCertainsMot(startLang: String, endLang: String): List<Mot>
-
+    */
 }

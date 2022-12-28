@@ -2,24 +2,24 @@ package com.example.translateapp.fragments.mainActivity.home
 
 import android.app.AlarmManager
 import android.app.PendingIntent
-import com.example.translateapp.R
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.SystemClock
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
-import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NotificationManagerCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.translateapp.R
 import com.example.translateapp.databinding.FragmentHomeBinding
 import com.example.translateapp.service.NotificationsService
 import java.util.*
@@ -57,7 +57,7 @@ class HomeFragment : Fragment() {
 
         dicoSpinner.adapter = adapter
 
-        homeViewModel.dictionnaires.observe(viewLifecycleOwner){
+        homeViewModel.dictionnaires.observe(viewLifecycleOwner) {
             adapter.clear()
             adapter.add("Google")
             adapter.addAll(it.map { d -> d.url })
@@ -67,7 +67,20 @@ class HomeFragment : Fragment() {
         val buttonSearch: Button = binding.searchBut
         buttonSearch.setOnClickListener(search)
 
-        startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+        val enableds = context?.let { NotificationManagerCompat.getEnabledListenerPackages(it) }
+        if (enableds != null) {
+            var enable = false;
+            for (value: String in enableds) {
+                Log.i("VALUE", value)
+                if (value == "com.example.translateapp") {
+                    enable = true;
+                }
+            }
+            if (!enable) {
+                startActivity(Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS"))
+            }
+        }
+
 
         /*
         * Lancement de l'alarme programmée pour 8h30

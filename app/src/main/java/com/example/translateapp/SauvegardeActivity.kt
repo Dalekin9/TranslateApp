@@ -3,13 +3,11 @@ package com.example.translateapp
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
-import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
 import com.example.translateapp.databinding.ActivitySauvegardeBinding
-import kotlinx.coroutines.InternalCoroutinesApi
 
 class SauvegardeActivity : AppCompatActivity() {
 
@@ -38,103 +36,79 @@ class SauvegardeActivity : AppCompatActivity() {
                 dicoURL = url
             }
         }
-    }
 
+        model.allMots
 
-    /*@OptIn(InternalCoroutinesApi::class)
-    fun addMot(view: View) {
-        //verif mot init non vide
-        val motInit = binding.word.text.toString().trim()
-        //verif mot trad nn vide
-        val motTrad = binding.wordTrad.text.toString().trim()
-        if (motInit != "" && motTrad != "") {
-            //check if dico existe
-            val langueInit = binding.languesourc.selectedItem.toString()
-            val langueTrad = binding.languedest.selectedItem.toString()
-            model.loadDictionnaire(dicoURL, langueInit, langueTrad)
-            // si oui mettre a jour les vars
-            if (model.certainsDictionnaires.value != null) {
-                dicoID = model.certainsDictionnaires.value!![0].idDico
-                Thread {
-                    dicoID = isDico.value!!.idDico
-                    // TODO check si le mot n'a pas deja ete add
-                    // ajout dans la bdd
-                    val mot = Mot(motInit, motTrad, dicoURL, dicoID,true, 0)
-                    val resultInsertion = model.insertMot(mot)
-                    Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
-                }.start()
-            } else {
+        model.allDictionnaires
 
-                val anyLock = Any()
-                fun syncWithArbitraryObjTest1(): Int = synchronized(anyLock) {
-                    // sinon creer un dico + insertDico + mettre a jour les vars
-                    val dico = Dictionnaire(dicoURL, langueInit, langueTrad)
-                    val resultInsertion1 = model.insertDico(dico)
-                    Log.d("INSERT", "Insertion dico : ${model.insertInfo.value}")
-                }
-                fun syncWithArbitraryObjTest2(): Int = synchronized(anyLock) {
-                    Log.d("INSERT", "Wait")
-                    // TODO check si le mot n'a pas deja ete add
-                    val dicoBD = model.loadDictionnaire(dicoURL, langueInit, langueTrad)
-                    Log.d("INSERT", "LOAD DICO : ${model.insertInfo.value}")
-                    dicoID = dicoBD.value?.idDico ?: 56
-                    Log.d("INSERT", "ID DICO : ${dicoID}")
-                    // ajout dans la bdd
-                    val mot = Mot(motInit, motTrad, dicoURL, dicoID,true, 0)
-                    val resultInsertion2 = model.insertMot(mot)
-                    Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
-                }
-
-                syncWithArbitraryObjTest1()
-                syncWithArbitraryObjTest2()
-
+        model.allMots.observe(this) {
+            Log.i("INSERT TEST", "j'ai ${it.size} mots")
+            for (mot: Mot in it) {
+                Log.i(
+                    "INSERT TEST",
+                    "mot ${mot.idMot}: ${mot.word}, ${mot.translation}, ${mot.dictionnary}, ${mot.urlTransl}"
+                )
             }
-
-
-            val act = Intent(this, MainActivity::class.java)
-            startActivity(act)
         }
-        // TODO affiche message pour pas que les champs soient vides
-        //Log.d("INSERT", "Insertion mot : $resultInsertion")
-    }*/
 
+        model.allDictionnaires.observe(this) {
+            Log.i("INSERT TEST", "j'ai ${it.size} dictionnaires")
+            for (mot: Dictionnaire in it) {
+                Log.i("INSERT TEST", "dico ${mot.idDico}: ${mot.url}")
+            }
+        }
 
-    private fun addMot() {
-        //verif mot init non vide
-        val motInit = binding.word.text.toString().trim()
-        //verif mot trad nn vide
-        val motTrad = binding.wordTrad.text.toString().trim()
-        if (motInit != "" && motTrad != "") {
-            //check if dico existe
+        model.certainsDictionnaires.observe(this) {
+            Log.i("INSERT TEST", "j'ai ${it.size} dictionnaires")
+            val motInit = binding.word.text.toString().trim()
+            val motTrad = binding.wordTrad.text.toString().trim()
             val langueInit = binding.languesourc.selectedItem.toString()
             val langueTrad = binding.languedest.selectedItem.toString()
-            model.loadDictionnaire(dicoURL, langueInit, langueTrad)
             // si oui mettre a jour les vars
-            if (model.certainsDictionnaires.value != null) {
+            if (it.isNotEmpty()) {
                 dicoID = model.certainsDictionnaires.value!![0].idDico
+                model.loadMot(motInit, langueTrad)
             } else {
                 // sinon creer un dico + insertDico + mettre a jour les vars
                 val dico = Dictionnaire(dicoURL, langueInit, langueTrad)
-                val mot = Mot(motInit, motTrad, dicoURL, dicoURL,true, langueInit, langueTrad, 0)
+                val mot = Mot(motInit, motTrad, dicoURL, dicoURL, true, langueInit, langueTrad, 0)
                 model.insertMotAndDictionnaireOfMot(mot, dico)
-                Log.d("INSERT", "Insertion dico : ${model.insertInfo.value}")
+                Log.d("INSERT TEST", "on a pas de dico")
+                val act = Intent(this, MainActivity::class.java)
+                startActivity(act)
             }
+        }
 
-            model.loadMot(motInit, langueTrad)
-            if(model.certainsMots.value == null){
+        model.certainsMots.observe(this) {
+            Log.i("INSERT TEST", "j'ai ${it.size} mots")
+            val motInit = binding.word.text.toString().trim()
+            val motTrad = binding.wordTrad.text.toString().trim()
+            val langueInit = binding.languesourc.selectedItem.toString()
+            val langueTrad = binding.languedest.selectedItem.toString()
+            if (it.isEmpty()) {
                 //Le mot n'a pas encore été ajouté à la bdd
                 val mot = Mot(motInit, motTrad, dicoURL, dicoURL, true, langueInit, langueTrad, 0)
                 model.insertMot(mot)
-                Log.d("INSERT", "Insertion mot : ${model.insertInfo.value}")
-            }else{
+                Log.d("INSERT TEST", "on a un dico qui existe, et pas de mot existant")
+            } else {
                 //TODO: Afficher un toast "d'erreur" ?
+                Log.d("INSERT TEST", "on a un dico qui existe, et un mot existant")
             }
-
             val act = Intent(this, MainActivity::class.java)
             startActivity(act)
         }
-        // TODO affiche message pour pas que les champs soient vides
-        //Log.d("INSERT", "Insertion mot : $resultInsertion")
+    }
+
+    private fun addMot() {
+        val motInit = binding.word.text.toString().trim()
+        val motTrad = binding.wordTrad.text.toString().trim()
+        if (motInit != "" && motTrad != "") {
+            val langueInit = binding.languesourc.selectedItem.toString()
+            val langueTrad = binding.languedest.selectedItem.toString()
+            model.loadDictionnaire(dicoURL, langueInit, langueTrad)
+        } else {
+            //TODO: Afficher un toast mots vide ?
+        }
     }
 
 }
