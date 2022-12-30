@@ -40,6 +40,8 @@ class NotificationsService : LifecycleService() {
         private lateinit var model: ServiceModel
     }
 
+    //TODO: Récupérer l'extra "nbNotifs" dans le service (Apparemment possible dans onBind)
+
     override fun onCreate() {
         super.onCreate()
 

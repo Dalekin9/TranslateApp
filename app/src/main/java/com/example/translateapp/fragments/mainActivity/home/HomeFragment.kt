@@ -2,7 +2,9 @@ package com.example.translateapp.fragments.mainActivity.home
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.content.Intent
+import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -32,7 +34,6 @@ class HomeFragment : Fragment() {
 
     lateinit var homeViewModel: HomeViewModel
 
-    @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,6 +47,11 @@ class HomeFragment : Fragment() {
 
         val sourceSpinner = binding.languesourc
         val destSpinner = binding.languedest
+
+        /**
+         *  Listener des spinners de langue afin de modifier le contenu disponible du spinner de dictinonaires
+         *  en fonction des langues choisies.
+         */
         sourceSpinner.onItemSelectedListener = object : OnItemSelectedListener{
             override fun onItemSelected(
                 parent: AdapterView<*>?,
@@ -118,13 +124,17 @@ class HomeFragment : Fragment() {
             }
         }
 
-
         /*
-        * Lancement de l'alarme programmée pour 8h30
+        * Lancement de l'alarme programmée pour l'heure choisie(8h30 par défaut)
         */
+        val sharedPrefs =requireContext().getSharedPreferences("parametres", Context.MODE_PRIVATE)
+        val heure = sharedPrefs.getInt("heure",8)
+        val minute = sharedPrefs.getInt("minute",30)
+        val nbNotifs = sharedPrefs.getInt("nbNotifs", 10)
 
-        /* TODO ajoute en extra, le nb voulue grace a sharedPreferences */
         val serviceIntent = Intent(requireContext(), NotificationsService::class.java)
+        serviceIntent.putExtra("nbNotifs", nbNotifs)
+
         val pendingIntent = PendingIntent.getService(
             requireContext(),
             0,
@@ -132,28 +142,18 @@ class HomeFragment : Fragment() {
             PendingIntent.FLAG_IMMUTABLE
         )
 
-        /* calculer le moment de demarrage d'alarme */
-        /* TODO voir comment modifier l'heure, surement via les sharedPreferences
-        *   mais surtout voir si cela est pris en compte lors du changement ds les parametres */
-
         //amorcer Alarme
         val alarmManager =
             requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
 
-        /*
+
         val calendar: Calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 17)
-            set(Calendar.MINUTE, 29)
+            set(Calendar.HOUR_OF_DAY, heure)
+            set(Calendar.MINUTE, minute)
+            set(Calendar.SECOND, 0)
         }
-        alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
-        */
-
-        alarmManager.setExact(
-            AlarmManager.ELAPSED_REALTIME_WAKEUP,
-            SystemClock.elapsedRealtime() + 15 * 1000,
-            pendingIntent
-        )
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
 
         if (savedInstanceState != null) {
             Log.i("SAVED", "dans savedInstance")

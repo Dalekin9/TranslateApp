@@ -4,18 +4,100 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#00FFFFFF"
     android:orientation="vertical"
     tools:context=".fragments.mainActivity.statistiques.StatistiquesFragment">
 
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Param"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/paramTitleView"
+        android:layout_width="146dp"
+        android:layout_height="42dp"
+        android:contentDescription="Paramètres"
+        android:text="Paramètres"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="24sp"
+        android:textStyle="bold|italic"
+        app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5" />
+        app:layout_constraintVertical_bias="0.08"
+        tools:ignore="SpeakableTextPresentCheck" />
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="172dp"
+        android:layout_height="132dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginStart="192dp"
+        android:layout_marginTop="52dp"
+        android:labelFor="@id/paramTitleView"
+        android:timePickerMode="spinner"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/paramTitleView" />
+
+    <TextView
+        android:id="@+id/heureTxtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="56dp"
+        android:layout_marginEnd="12dp"
+        android:text="Heure d'exercice:"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/timePicker"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/timePicker"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/saveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/purple_200"
+        android:backgroundTint="#FFFFFF"
+        android:text="Sauvegarder"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.956" />
+
+    <TextView
+        android:id="@+id/NbNotifsTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="108dp"
+        android:text="Nombre de\n notifications:"
+        android:textAlignment="center"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@+id/heureTxtView"
+        app:layout_constraintTop_toBottomOf="@+id/heureTxtView" />
+
+    <EditText
+        android:id="@+id/nbNotifsEditText"
+        android:layout_width="161dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="60dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:minHeight="48dp"
+        android:text="Name"
+        android:textAlignment="center"
+        app:layout_constraintEnd_toEndOf="@+id/timePicker"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_begin="20dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
+
