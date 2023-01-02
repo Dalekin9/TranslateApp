@@ -13,6 +13,7 @@
         android:layout_width="146dp"
         android:layout_height="42dp"
         android:contentDescription="Paramètres"
+        android:gravity="center"
         android:text="Paramètres"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
@@ -29,27 +30,26 @@
         android:layout_width="172dp"
         android:layout_height="132dp"
         android:layout_centerHorizontal="true"
-        android:layout_marginStart="192dp"
-        android:layout_marginTop="52dp"
         android:labelFor="@id/paramTitleView"
         android:timePickerMode="spinner"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/paramTitleView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/heureTxtView"
+        app:layout_constraintStart_toStartOf="@+id/heureTxtView"
+        app:layout_constraintTop_toBottomOf="@+id/heureTxtView"
+        app:layout_constraintVertical_bias="0.26" />
 
     <TextView
         android:id="@+id/heureTxtView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="56dp"
-        android:layout_marginEnd="12dp"
+        android:gravity="center"
         android:text="Heure d'exercice"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/timePicker"
-        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintEnd_toStartOf="@+id/paramTitleView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/timePicker"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/paramTitleView"
+        app:layout_constraintVertical_bias="0.112" />
 
     <Button
         android:id="@+id/saveButton"
@@ -60,43 +60,48 @@
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.90" />
+        app:layout_constraintVertical_bias="0.85" />
 
     <TextView
         android:id="@+id/NbNotifsTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="108dp"
+        android:gravity="center"
         android:text="Nombre de\n notifications"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@+id/heureTxtView"
-        app:layout_constraintTop_toBottomOf="@+id/heureTxtView" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/paramTitleView"
+        app:layout_constraintTop_toBottomOf="@+id/paramTitleView"
+        app:layout_constraintVertical_bias="0.07999998" />
 
     <EditText
         android:id="@+id/nbNotifsEditText"
         android:layout_width="161dp"
         android:layout_height="48dp"
-        android:layout_marginTop="60dp"
         android:ems="10"
+        android:gravity="center"
         android:inputType="textPersonName"
         android:minHeight="48dp"
         android:text="Name"
         android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/timePicker"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/timePicker"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/NbNotifsTextView"
+        app:layout_constraintHorizontal_bias="0.50"
+        app:layout_constraintStart_toStartOf="@+id/NbNotifsTextView"
+        app:layout_constraintTop_toBottomOf="@+id/NbNotifsTextView"
+        app:layout_constraintVertical_bias="0.26" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="20dp" />
+        app:layout_constraintGuide_begin="230dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 
