@@ -132,28 +132,47 @@ class HomeFragment : Fragment() {
         val minute = sharedPrefs.getInt("minute",30)
         val nbNotifs = sharedPrefs.getInt("nbNotifs", 10)
 
+        Toast.makeText(requireContext(), "Alarm set to $heure:$minute", Toast.LENGTH_LONG).show()
         val serviceIntent = Intent(requireContext(), NotificationsService::class.java)
         serviceIntent.putExtra("nbNotifs", nbNotifs)
 
-        val pendingIntent = PendingIntent.getService(
+        val pendingIntentVerif = PendingIntent.getService(
             requireContext(),
             0,
             serviceIntent,
-            PendingIntent.FLAG_IMMUTABLE
+            PendingIntent.FLAG_NO_CREATE or PendingIntent.FLAG_IMMUTABLE
         )
 
-        //amorcer Alarme
-        val alarmManager =
-            requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
+        // Si une alarme à déjà été set, ne rien faire
+        if(pendingIntentVerif == null){
+            Log.d("AlarmeSet", "NON")
+
+            val pendingIntent = PendingIntent.getService(
+                requireContext(),
+                0,
+                serviceIntent,
+                PendingIntent.FLAG_IMMUTABLE
+            )
+
+            //amorcer Alarme
+            val alarmManager =
+                requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
 
 
-        val calendar: Calendar = Calendar.getInstance().apply {
-            timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, heure)
-            set(Calendar.MINUTE, minute)
-            set(Calendar.SECOND, 0)
+            val calendar: Calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
+                set(Calendar.HOUR_OF_DAY, heure)
+                set(Calendar.MINUTE, minute)
+                set(Calendar.SECOND, 0)
+            }
+            if(System.currentTimeMillis() >= calendar.timeInMillis){
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, pendingIntent)
+            }else{
+                alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+            }
+        }else{
+            Log.d("AlarmeSet", "OUI")
         }
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
 
         if (savedInstanceState != null) {
             Log.i("SAVED", "dans savedInstance")
