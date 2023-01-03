@@ -14,17 +14,12 @@
     <fragment
         android:id="@+id/navigation_jeu"
         android:name="com.example.translateapp.fragments.mainActivity.jeu.JeuFragment"
-        android:label="@string/title_dashboard" />
-
-    <fragment
-        android:id="@+id/navigation_statistiques"
-        android:name="com.example.translateapp.fragments.mainActivity.statistiques.StatistiquesFragment"
-        android:label="stats"
-        tools:layout="@layout/fragment_stats" />
+        android:label="@string/title_dashboard"
+        tools:layout="@layout/fragment_jeu" />
 
     <fragment
         android:id="@+id/navigation_parametres"
         android:name="com.example.translateapp.fragments.mainActivity.parametres.ParametresFragment"
         android:label="param"
-        tools:layout="@layout/fragment_stats" />
+        tools:layout="@layout/fragment_param" />
 </navigation>
