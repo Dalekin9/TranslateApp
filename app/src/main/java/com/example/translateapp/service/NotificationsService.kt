@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
+import android.os.IBinder
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -54,10 +55,11 @@ class NotificationsService : LifecycleService() {
 
         model.loadMotsLearn.observe(this) {
             data = it
+            val nbNotifsFromShared = getSharedPreferences("parametres", Context.MODE_PRIVATE).getInt("nbNotifs",10)
             Log.i("INFO NOTIF", "observer")
             if (data != null) {
                 Log.i("INFO NOTIF", "data non null")
-                val nbNotifs = min(12, data!!.size)
+                val nbNotifs = min(nbNotifsFromShared, data!!.size)
                 Log.i("INFO NOTIF", "nb de notif: $nbNotifs")
                 val currentIdList = currentIdMotMap.keys
                 Log.i("INFO NOTIF", "nb de id: ${currentIdList.size}")

@@ -45,7 +45,7 @@ class ParametresFragment : Fragment() {
         val root: View = binding.root
 
         val heure = requireContext().getSharedPreferences("parametres", Context.MODE_PRIVATE).getInt("heure",8)
-        val minute = requireContext().getSharedPreferences("parametres", Context.MODE_PRIVATE).getInt("minute",57)
+        val minute = requireContext().getSharedPreferences("parametres", Context.MODE_PRIVATE).getInt("minute",30)
 
         val timePicker = binding.timePicker
         timePicker.setIs24HourView(true)
@@ -97,7 +97,11 @@ class ParametresFragment : Fragment() {
             set(Calendar.MINUTE, minutes)
             set(Calendar.SECOND, 0)
         }
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+        if(System.currentTimeMillis() >= calendar.timeInMillis){
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis + AlarmManager.INTERVAL_DAY, AlarmManager.INTERVAL_DAY, pendingIntent)
+        }else{
+            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
+        }
 
         val newNbNotifs : Int = binding.nbNotifsEditText.text.toString().toInt()
         sharedPrefs.edit().putInt("nbNotifs", newNbNotifs).apply()
