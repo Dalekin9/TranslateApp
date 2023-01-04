@@ -68,7 +68,6 @@ class JeuFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                Log.i("JEUFRAGMENT", "dans endLang listener")
                 updateData()
             }
 
@@ -77,8 +76,6 @@ class JeuFragment : Fragment() {
         }
 
         jeuModel.listMots.observe(viewLifecycleOwner) {
-            Log.i("JEUFRAGMENT", "observer jeu model")
-
             if (it.isNotEmpty()) {
 
                 listeMots.clear()
@@ -99,7 +96,6 @@ class JeuFragment : Fragment() {
         }
 
         if (savedInstanceState != null) {
-            Log.i("SAVED", "saved Instance")
             binding.wordToFind.text = savedInstanceState.getString("word")
             binding.translateToFind.text = savedInstanceState.getString("translation")
             binding.langue1.setSelection(savedInstanceState.getInt("langue1"))
@@ -121,7 +117,6 @@ class JeuFragment : Fragment() {
     }
 
     fun updateData() {
-        Log.i("JEUFRAGMENT", "update data")
         val startLang: Spinner = binding.langue1
         val endLang: Spinner = binding.langue2
 
@@ -131,14 +126,13 @@ class JeuFragment : Fragment() {
             endLang.selectedItem.toString()
         )
 
-        mot = null;
+        mot = null
         binding.wordToFind.text = ""
         binding.translateToFind.text = ""
         listeMots.removeAll(listeMots.toList())
     }
 
     private val voirLaReponse = View.OnClickListener {
-        Log.i("JEUFRAGMENT", "voir réponse")
         if (mot != null) {
             val translate = binding.translateToFind
             translate.text = mot!!.translation
@@ -146,7 +140,6 @@ class JeuFragment : Fragment() {
     }
 
     private val next = View.OnClickListener {
-        Log.i("JEUFRAGMENT", "next")
         if (listeMots.isNotEmpty()) {
             val wordToFind: TextView = binding.wordToFind
             val translate = binding.translateToFind

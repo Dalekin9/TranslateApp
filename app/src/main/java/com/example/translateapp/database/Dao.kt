@@ -6,7 +6,7 @@ import com.example.translateapp.database.entity.Dictionnaire
 import com.example.translateapp.database.entity.Mot
 
 @Dao
-public abstract class Dao{
+abstract class Dao {
 
     /*
     **************
@@ -15,7 +15,7 @@ public abstract class Dao{
      */
 
     @Insert(entity = Dictionnaire::class, onConflict = OnConflictStrategy.IGNORE)
-    abstract fun insertDico(vararg dictionnaire: Dictionnaire):List<Long>
+    abstract fun insertDico(vararg dictionnaire: Dictionnaire): List<Long>
 
     @Insert(entity = Mot::class, onConflict = OnConflictStrategy.IGNORE)
     abstract fun insertMot(vararg mot: Mot):List<Long>
@@ -68,11 +68,6 @@ public abstract class Dao{
         endLang: String
     ): List<Dictionnaire>
 
-    /*
-    @Query("SELECT * FROM Dictionnaire INNER JOIN Mot WHERE word = :mot AND url = dictionnary AND endLanguage = :endLang")
-    abstract fun loadDictionnaireDeMot(mot: String, endLang: String): List<Dictionnaire>
-    */
-
     @Query("SELECT * FROM Mot INNER JOIN Dictionnaire WHERE word = :mot AND url = dictionnary AND endLanguage = :endLang")
     abstract fun loadMot(mot: String, endLang: String): List<Mot>
 
@@ -89,8 +84,4 @@ public abstract class Dao{
         endLang: String
     ): List<Mot>
 
-    /*
-    @Query("SELECT * FROM Mot WHERE initLanguage = :startLang AND tradLanguage = :endLang")
-    abstract fun loadCertainsMot(startLang: String, endLang: String): List<Mot>
-    */
 }

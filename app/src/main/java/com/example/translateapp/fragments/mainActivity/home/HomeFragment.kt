@@ -8,8 +8,6 @@ import android.icu.util.Calendar
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.os.SystemClock
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -34,6 +32,7 @@ class HomeFragment : Fragment() {
 
     lateinit var homeViewModel: HomeViewModel
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -59,8 +58,10 @@ class HomeFragment : Fragment() {
                 position: Int,
                 id: Long
             ) {
-                homeViewModel.loadSameLangDictionnaires(sourceSpinner.selectedItem.toString(),
-                                                        destSpinner.selectedItem.toString())
+                homeViewModel.loadSameLangDictionnaires(
+                    sourceSpinner.selectedItem.toString(),
+                    destSpinner.selectedItem.toString()
+                )
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -80,9 +81,6 @@ class HomeFragment : Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {
             }
         }
-
-
-
 
         val dicoSpinner: Spinner = binding.dictionnary
         val dictionnaries = requireActivity().resources.getStringArray(R.array.spinner_entries).toMutableList()
@@ -106,17 +104,30 @@ class HomeFragment : Fragment() {
         val buttonSearch: Button = binding.searchBut
         buttonSearch.setOnClickListener(search)
 
+        setAlarm()
+
+        if (savedInstanceState != null) {
+            binding.languesourc.setSelection(savedInstanceState.getInt("spinner1", 0))
+            binding.languedest.setSelection(savedInstanceState.getInt("spinner2", 0))
+            binding.dictionnary.setSelection(savedInstanceState.getInt("dico"))
+            binding.word.setText(savedInstanceState.getString("mot"))
+        }
+
+        return root
+    }
+
+    @RequiresApi(Build.VERSION_CODES.N)
+    fun setAlarm() {
         /**
          * Permet d'obtenir l'accès aux notifications
          * Afin d'actualiser les données quand on supprime une notification
          */
         val enableds = context?.let { NotificationManagerCompat.getEnabledListenerPackages(it) }
         if (enableds != null) {
-            var enable = false;
+            var enable = false
             for (value: String in enableds) {
-                Log.i("VALUE", value)
                 if (value == "com.example.translateapp") {
-                    enable = true;
+                    enable = true
                 }
             }
             if (!enable) {
@@ -145,7 +156,6 @@ class HomeFragment : Fragment() {
 
         // Si une alarme à déjà été set, ne rien faire
         if(pendingIntentVerif == null){
-            Log.d("AlarmeSet", "NON")
 
             val pendingIntent = PendingIntent.getService(
                 requireContext(),
@@ -158,7 +168,6 @@ class HomeFragment : Fragment() {
             val alarmManager =
                 requireActivity().getSystemService(AppCompatActivity.ALARM_SERVICE) as AlarmManager
 
-
             val calendar: Calendar = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
                 set(Calendar.HOUR_OF_DAY, heure)
@@ -170,19 +179,8 @@ class HomeFragment : Fragment() {
             }else{
                 alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
             }
-        }else{
-            Log.d("AlarmeSet", "OUI")
         }
 
-        if (savedInstanceState != null) {
-            Log.i("SAVED", "dans savedInstance")
-            binding.languesourc.setSelection(savedInstanceState.getInt("spinner1", 0))
-            binding.languedest.setSelection(savedInstanceState.getInt("spinner2", 0))
-            binding.dictionnary.setSelection(savedInstanceState.getInt("dico"))
-            binding.word.setText(savedInstanceState.getString("mot"))
-        }
-
-        return root
     }
 
     override fun onDestroyView() {
@@ -198,7 +196,6 @@ class HomeFragment : Fragment() {
         return names
     }
 
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         if (_binding != null) {
@@ -208,7 +205,6 @@ class HomeFragment : Fragment() {
             outState.putString("mot", binding.word.text.toString())
         }
     }
-
 
     /**
      * ClickListener du bouton buttonSearch
@@ -228,7 +224,6 @@ class HomeFragment : Fragment() {
             toast.show()
         } else {
             var url = "http://www.google.fr/search?q=traduction+$mot+$endLang"
-
             homeViewModel.loadMot(mot, endLang)
             if (homeViewModel.certainsMots.value != null && homeViewModel.certainsMots.value!!.isNotEmpty()) {   //Cas
                 url = homeViewModel.certainsMots.value!![0].urlTransl
@@ -241,7 +236,5 @@ class HomeFragment : Fragment() {
             intent.data = Uri.parse(url)
             startActivity(intent)
         }
-
     }
-
 }

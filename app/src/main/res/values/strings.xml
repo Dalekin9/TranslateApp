@@ -9,6 +9,8 @@
     <string name="title_dashboard">Data</string>
     <string name="title_notifications">Notifications</string>
     <string name="fleche">-></string>
+    <string name="Jeu">Jeu</string>
+    <string name="Params">Params</string>
 
     <array name="spinner_entries">
         <item>Google</item>
