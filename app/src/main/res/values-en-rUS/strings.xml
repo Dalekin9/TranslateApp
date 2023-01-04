@@ -6,17 +6,15 @@
     <string name="word">Word</string>
     <string name="traduction">Traduction</string>
     <string name="title_activity_main">MainActivity</string>
-    <string name="title_home">Trad</string>
+    <string name="title_home">Home</string>
     <string name="fleche">-></string>
     <string name="Jeu">Game</string>
-    <string name="Params">Params</string>
+    <string name="Params">Settings</string>
     <string name="title_notifications">Notifications</string>
-    <string name="Fr">French</string>
-    <string name="Ang">English</string>
-    <string name="Es">Spanish</string>
-    <string name="Jap">Japanese</string>
-    <string name="DS">German</string>
-    <string name="Ru">Russian</string>
-    <string name="PR">Portuguese</string>
-    <string name="In">Indian</string>
+    <string name="answer">Answer</string>
+    <string name="next">Next</string>
+    <string name="heure_d_exercice">Exercise time</string>
+    <string name="_2">2</string>
+    <string name="parametres">Settings</string>
+    <string name="nombre_de_notifications">Notifications</string>
 </resources>
