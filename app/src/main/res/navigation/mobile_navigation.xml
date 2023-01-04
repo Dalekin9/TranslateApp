@@ -14,12 +14,12 @@
     <fragment
         android:id="@+id/navigation_jeu"
         android:name="com.example.translateapp.fragments.mainActivity.jeu.JeuFragment"
-        android:label="@string/title_dashboard"
+        android:label="@string/Jeu"
         tools:layout="@layout/fragment_jeu" />
 
     <fragment
         android:id="@+id/navigation_parametres"
         android:name="com.example.translateapp.fragments.mainActivity.parametres.ParametresFragment"
-        android:label="param"
+        android:label="@string/Params"
         tools:layout="@layout/fragment_param" />
 </navigation>
