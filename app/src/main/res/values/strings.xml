@@ -11,6 +11,14 @@
     <string name="fleche">-></string>
     <string name="Jeu">Jeu</string>
     <string name="Params">Params</string>
+    <string name="answer">Answer</string>
+    <string name="next">Next</string>
+    <string name="heure_d_exercice">Heure d\'exercice</string>
+    <string name="sauvegarder">Sauvegarder</string>
+    <string name="nombre_de_notifications">Nombre de\n notifications</string>
+    <string name="param_tres">Paramètres</string>
+    <string name="parametres">Paramètres</string>
+    <string name="_2">2</string>
 
     <array name="spinner_entries">
         <item>Google</item>

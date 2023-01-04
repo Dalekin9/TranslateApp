@@ -42,7 +42,7 @@ class SauvegardeActivity : AppCompatActivity() {
         }
 
         model.certainsDictionnaires.observe(this) {
-            Log.i("INSERT TEST", "j'ai ${it.size} dictionnaires")
+            Log.i("INSERT TEST", "J'ai ${it.size} dictionnaires")
             val motInit = binding.wordToBD.text.toString().trim()
             val motTrad = binding.translateToBD.text.toString().trim()
             val langueInit = binding.langueSrcToBD.selectedItem.toString()
@@ -56,14 +56,14 @@ class SauvegardeActivity : AppCompatActivity() {
                 val dico = Dictionnaire(dicoURL, langueInit, langueTrad)
                 val mot = Mot(motInit, motTrad, dicoURL, dicoURL, true, langueInit, langueTrad, 0)
                 model.insertMotAndDictionnaireOfMot(mot, dico)
-                Log.d("INSERT TEST", "on a pas de dico")
+                Log.i("INSERT TEST", "On a pas de dico")
                 val act = Intent(this, MainActivity::class.java)
                 startActivity(act)
             }
         }
 
         model.certainsMots.observe(this) {
-            Log.i("INSERT TEST", "j'ai ${it.size} mots")
+            Log.i("EXAMEN", "J'ai ${it.size} mots")
             val motInit = binding.wordToBD.text.toString().trim()
             val motTrad = binding.translateToBD.text.toString().trim()
             val langueInit = binding.langueSrcToBD.selectedItem.toString()
@@ -72,13 +72,13 @@ class SauvegardeActivity : AppCompatActivity() {
                 //Le mot n'a pas encore été ajouté à la bdd
                 val mot = Mot(motInit, motTrad, dicoURL, dicoURL, true, langueInit, langueTrad, 0)
                 model.insertMot(mot)
-                Log.d("INSERT TEST", "on a un dico qui existe, et pas de mot existant")
+                Log.i("EXAMEN", "On a un dico qui existe, et pas de mot existant")
             } else {
                 val text = "Ce mot est déjà présent dans nos données."
                 val duration = Toast.LENGTH_SHORT
                 val toast = Toast.makeText(applicationContext, text, duration)
                 toast.show()
-                Log.d("INSERT TEST", "on a un dico qui existe, et un mot existant")
+                Log.i("INSERT TEST", "On a un dico qui existe, et un mot existant")
             }
             val act = Intent(this, MainActivity::class.java)
             startActivity(act)

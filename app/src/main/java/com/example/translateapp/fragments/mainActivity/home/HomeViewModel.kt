@@ -2,7 +2,6 @@ package com.example.translateapp.fragments.mainActivity.home
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.translateapp.database.DicoBD
 import com.example.translateapp.database.entity.Dictionnaire
@@ -25,8 +24,6 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     /*
     ---------------
      */
-
-    var dictionnaires : LiveData<List<Dictionnaire>> = dao.loadAllDictionnaires()
 
     var certainsDictionnaires = MutableLiveData<List<Dictionnaire>>()
 

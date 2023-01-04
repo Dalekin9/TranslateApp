@@ -7,7 +7,6 @@ import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.IBinder
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
 import android.util.Log
@@ -41,8 +40,6 @@ class NotificationsService : LifecycleService() {
         private lateinit var model: ServiceModel
     }
 
-    //TODO: Récupérer l'extra "nbNotifs" dans le service (Apparemment possible dans onBind)
-
     override fun onCreate() {
         super.onCreate()
 
@@ -51,18 +48,12 @@ class NotificationsService : LifecycleService() {
         dao = (application as DicoApplication).database.MyDao()
         createNotificationChannel()
 
-        Log.i("INFO NOTIF", "onCreate")
-
         model.loadMotsLearn.observe(this) {
             data = it
             val nbNotifsFromShared = getSharedPreferences("parametres", Context.MODE_PRIVATE).getInt("nbNotifs",10)
-            Log.i("INFO NOTIF", "observer")
             if (data != null) {
-                Log.i("INFO NOTIF", "data non null")
                 val nbNotifs = min(nbNotifsFromShared, data!!.size)
-                Log.i("INFO NOTIF", "nb de notif: $nbNotifs")
                 val currentIdList = currentIdMotMap.keys
-                Log.i("INFO NOTIF", "nb de id: ${currentIdList.size}")
                 for (i in 0 until nbNotifs) {
                     if (!currentIdList.contains(i)) {
 
@@ -107,7 +98,6 @@ class NotificationsService : LifecycleService() {
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         super.onStartCommand(intent, flags, startId)
-        Log.i("INFO NOTIF", "onStartCommand")
         model.loadAllMotNeedToBeLearn(true)
 
         return START_NOT_STICKY
@@ -116,8 +106,6 @@ class NotificationsService : LifecycleService() {
     /* les notifications doivent posséder un channel */
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            //val name = getString(R.string.channel_name)
-            //val descriptionText = getString(R.string.channel_description)
 
             val name = "channel_name"
             val descriptionText = "channel_description"
@@ -132,55 +120,34 @@ class NotificationsService : LifecycleService() {
 
     class NotifListenerService : NotificationListenerService() {
 
-        override fun onCreate() {
-            Log.i("INFOS", "onCreate")
-            super.onCreate()
-        }
-
-        override fun onListenerConnected() {
-            super.onListenerConnected()
-            Log.i("INFOS", "onListenerConnected")
-        }
-
         override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-            Log.i("INFOS", "onStartCommand")
             return super.onStartCommand(intent, flags, startId)
         }
 
         override fun onNotificationPosted(sbn: StatusBarNotification?) {
             super.onNotificationPosted(sbn)
-            Log.e("INFOS", "onNotificationsPosted")
         }
 
         override fun onNotificationRemoved(sbn: StatusBarNotification?) {
             super.onNotificationRemoved(sbn)
-            /*
-            TODO update la date d'apprentissage
-             */
-            Log.i("REMOVE", "dans onNotifRemove: ${currentIdMotMap.keys.size}")
 
             if (sbn != null) {
                 val id = sbn.id
                 val mot: Mot? = currentIdMotMap[id]
 
-
-                Log.i("REMOVE", "nb de id dans onNotifRemove: ${currentIdMotMap.keys.size}")
-                Log.i("REMOVE", "mot : ${mot?.word}")
+                Log.i("EXAMEN", "Mot : ${mot?.word}")
 
                 if (mot != null) {
                     mot.knowledge += 1
-                    Log.i("REMOVE", "mot knowledge : ${mot.knowledge}")
+                    Log.i("EXAMEN", "Knowledge du mot: ${mot.knowledge}")
                     if (mot.knowledge == 3) {
-                        Log.i("REMOVE", "mot knowledge == 3 => : ${mot.knowledge}")
                         mot.knowledge = 0
                         mot.toLearn = false
                     }
                     model.updateMot(mot)
                 }
-
                 currentIdMotMap.remove(id)
             }
         }
     }
-
 }

@@ -8,8 +8,7 @@
     <item
         android:id="@+id/navigation_jeu"
         android:icon="@drawable/ic_games_black_24"
-        android:title="@string/Jeu" />
-
+        android:title="Jeu" />
     <item
         android:id="@+id/navigation_parametres"
         android:icon="@drawable/ic_settings_black_24"

@@ -7,29 +7,21 @@ import android.content.Context
 import android.content.Intent
 import android.icu.util.Calendar
 import android.os.Bundle
-import android.os.SystemClock
 import android.text.InputType
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.translateapp.databinding.FragmentParamBinding
-import com.example.translateapp.R
 import com.example.translateapp.service.NotificationsService
 
 class ParametresFragment : Fragment() {
 
     private var _binding: FragmentParamBinding? = null
 
-    // This property is only valid between onCreateView and
-    // onDestroyView.
     private val binding get() = _binding!!
-
-    lateinit var parametresViewModel: ParametresViewModel
 
     @SuppressLint("CommitPrefEdits")
     override fun onCreateView(
@@ -37,9 +29,6 @@ class ParametresFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-        parametresViewModel = ViewModelProvider(this).get(ParametresViewModel::class.java)
-
 
         _binding = FragmentParamBinding.inflate(inflater, container, false)
         val root: View = binding.root
@@ -54,10 +43,6 @@ class ParametresFragment : Fragment() {
         binding.saveButton.setOnClickListener {
             sauvegarderParam()
         }
-
-        val nbNotifs = requireContext().getSharedPreferences("parametres", Context.MODE_PRIVATE).getInt("nbNotifs",10)
-        binding.nbNotifsEditText.setText(nbNotifs.toString())
-        binding.nbNotifsEditText.inputType = InputType.TYPE_CLASS_NUMBER
 
         return root
     }
@@ -103,7 +88,7 @@ class ParametresFragment : Fragment() {
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, pendingIntent)
         }
 
-        val newNbNotifs : Int = binding.nbNotifsEditText.text.toString().toInt()
+        val newNbNotifs : Int = binding.nbNotifsEditText!!.text.toString().toInt()
         sharedPrefs.edit().putInt("nbNotifs", newNbNotifs).apply()
 
         Toast.makeText(context, "Paramètres sauvegardés", Toast.LENGTH_SHORT).show()

@@ -38,7 +38,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/languedest"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintVertical_bias="0.25"
+        tools:ignore="TextContrastCheck" />
 
     <Spinner
         android:id="@+id/dictionnary"
@@ -63,7 +64,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/languesourc" />
+        app:layout_constraintTop_toBottomOf="@+id/languesourc"
+        tools:ignore="DuplicateSpeakableTextCheck" />
 
     <Spinner
         android:id="@+id/languesourc"

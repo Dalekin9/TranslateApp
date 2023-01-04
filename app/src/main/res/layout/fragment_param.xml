@@ -6,17 +6,18 @@
     android:layout_height="match_parent"
     android:background="#00FFFFFF"
     android:orientation="vertical"
-    tools:context=".fragments.mainActivity.statistiques.StatistiquesFragment">
+    tools:context=".fragments.mainActivity.parametres.ParametresFragment">
 
     <TextView
         android:id="@+id/paramTitleView"
-        android:layout_width="146dp"
+        android:layout_width="wrap_content"
         android:layout_height="42dp"
-        android:contentDescription="Paramètres"
-        android:text="Paramètres"
+        android:contentDescription="@string/param_tres"
+        android:gravity="center"
+        android:text="@string/parametres"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
-        android:textStyle="bold|italic"
+        android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/saveButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -30,7 +31,7 @@
         android:layout_height="132dp"
         android:layout_centerHorizontal="true"
         android:layout_marginStart="192dp"
-        android:layout_marginTop="52dp"
+        android:layout_marginTop="44dp"
         android:labelFor="@id/paramTitleView"
         android:timePickerMode="spinner"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="56dp"
         android:layout_marginEnd="12dp"
-        android:text="Heure d'exercice"
+        android:text="@string/heure_d_exercice"
         android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/timePicker"
@@ -56,13 +57,14 @@
         android:layout_width="160dp"
         android:layout_height="60dp"
         android:backgroundTint="@color/light_purple"
-        android:text="Sauvegarder"
+        android:text="@string/sauvegarder"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.90" />
+        app:layout_constraintVertical_bias="0.90"
+        tools:ignore="TextContrastCheck" />
 
     <TextView
         android:id="@+id/NbNotifsTextView"
@@ -70,26 +72,11 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="108dp"
-        android:text="Nombre de\n notifications"
+        android:text="@string/nombre_de_notifications"
         android:textAlignment="center"
         android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/heureTxtView"
         app:layout_constraintTop_toBottomOf="@+id/heureTxtView" />
-
-    <EditText
-        android:id="@+id/nbNotifsEditText"
-        android:layout_width="161dp"
-        android:layout_height="48dp"
-        android:layout_marginTop="60dp"
-        android:ems="10"
-        android:inputType="textPersonName"
-        android:minHeight="48dp"
-        android:text="Name"
-        android:textAlignment="center"
-        app:layout_constraintEnd_toEndOf="@+id/timePicker"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/timePicker"
-        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline3"
@@ -97,6 +84,22 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_begin="20dp" />
+
+    <EditText
+        android:id="@+id/nbNotifsEditText"
+        android:layout_width="126dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="64dp"
+        android:ems="10"
+        android:gravity="center"
+        android:hint="@string/_2"
+        android:importantForAutofill="no"
+        android:inputType="number"
+        android:minHeight="48dp"
+        android:text="@string/_2"
+        app:layout_constraintEnd_toEndOf="@+id/timePicker"
+        app:layout_constraintStart_toStartOf="@+id/timePicker"
+        app:layout_constraintTop_toBottomOf="@+id/timePicker" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

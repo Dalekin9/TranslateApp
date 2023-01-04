@@ -16,14 +16,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
     var certainsDictionnaires = MutableLiveData<List<Dictionnaire>>()
     var certainsMots = MutableLiveData<List<Mot>>()
 
-    fun insertDico(vararg dictionnaire: Dictionnaire){
-        thread {
-            val l = dao.insertDico(*dictionnaire)
-            Log.d("INSERT", "dans Insertion dico")
-            insertInfo.postValue(if (l[0] == -1L) -1L else l[0])
-        }
-    }
-
     fun insertMot(vararg mot: Mot){
         thread {
             val l = dao.insertMot(*mot)
@@ -38,10 +30,6 @@ class ViewModel(application: Application) : AndroidViewModel(application) {
             Log.d("INSERT", "dans Insertion mot et Dictionnaire de mot")
         }
     }
-
-    var allDictionnaires = dao.loadAllDictionnaires()
-
-    var allMots = dao.loadAllMots()
 
     fun loadDictionnaire(url: String, startLang: String, endLang: String) =
         thread{ certainsDictionnaires.postValue(dao.loadDictionnaire(url, startLang, endLang))}
